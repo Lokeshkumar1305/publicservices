@@ -1,0 +1,117 @@
+@import './palette';
+@import './typography';
+
+// Generic Button Design System
+.ps-btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+
+  &-primary {
+    background-color: $primary-700;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 43, 97, 0.2);
+
+    &:hover {
+      background-color: $primary-500;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 43, 97, 0.3);
+    }
+  }
+
+  &-secondary {
+    background-color: $secondary-300;
+    color: white;
+    box-shadow: 0 4px 12px rgba(18, 179, 147, 0.2);
+
+    &:hover {
+      background-color: $secondary-500;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(18, 179, 147, 0.3);
+    }
+  }
+
+  &-outline {
+    background-color: transparent;
+    border: 1.5px solid $neutral-700;
+    color: $neutral-300;
+
+    &:hover {
+      background-color: $neutral-900;
+      border-color: $neutral-500;
+    }
+  }
+}
+
+// Material Component Overrides for Premium Aesthetic
+.mat-mdc-card {
+  border-radius: 16px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
+  padding: 8px;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    border-width: 1.5px !important;
+  }
+
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $secondary-300 !important;
+    }
+  }
+}
+
+// Selection Controls
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-focus-icon-color: #{$secondary-300};
+  --mdc-checkbox-selected-hover-icon-color: #{$secondary-300};
+  --mdc-checkbox-selected-icon-color: #{$secondary-300};
+  --mdc-checkbox-selected-pressed-icon-color: #{$secondary-300};
+}
+
+.mat-mdc-radio-button.mat-primary {
+  --mdc-radio-selected-focus-icon-color: #{$secondary-300};
+  --mdc-radio-selected-hover-icon-color: #{$secondary-300};
+  --mdc-radio-selected-icon-color: #{$secondary-300};
+  --mdc-radio-selected-pressed-icon-color: #{$secondary-300};
+}
+
+// Chips
+.mat-mdc-standard-chip {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+
+  &.mat-mdc-chip-selected.mat-primary {
+    --mdc-chip-elevated-container-color: #{$secondary-300};
+  }
+}
+
+// Global UI Classes
+.ps-shadow {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.rounded-lg {
+  border-radius: 16px !important;
+}

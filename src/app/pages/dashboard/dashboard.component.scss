@@ -1,0 +1,78 @@
+@import '../../../styles/palette';
+
+.enterprise-dashboard {
+  background-color: #f8fafc;
+  min-height: calc(100vh - 64px);
+}
+
+.stat-icon-bg {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  opacity: 0.05;
+  transform: rotate(-15deg);
+
+  mat-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.icon-square {
+  width: 40px;
+  height: 40px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.activity-feed {
+  .activity-item {
+    position: relative;
+
+    .activity-dot-line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .activity-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-top: 5px;
+      }
+
+      &::after {
+        content: '';
+        flex-grow: 1;
+        width: 1px;
+        background-color: rgba(0, 0, 0, 0.05);
+        margin: 4px 0;
+      }
+    }
+
+    &:last-child .activity-dot-line::after {
+      display: none;
+    }
+  }
+}
+
+.last-child-mb-0 {
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.table th {
+  border: none;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding-bottom: 16px;
+}
+
+.bg-primary-900 {
+  background-color: $primary-900 !important;
+}

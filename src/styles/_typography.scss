@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+$font-family: 'Outfit', sans-serif;
+
+// Mixin for generating typography classes
+@mixin typo($size, $weight, $line-height: normal) {
+  font-size: #{$size}px;
+  font-weight: $weight;
+  line-height: $line-height;
+}
+
+// Heading Classes
+.h1-reg {
+  @include typo(48, 400);
+}
+
+.h2-reg {
+  @include typo(40, 400);
+}
+
+.h3-reg {
+  @include typo(32, 400);
+}
+
+.h4-reg {
+  @include typo(28, 400);
+}
+
+.h5-reg {
+  @include typo(24, 400);
+}
+
+.h1-med {
+  @include typo(48, 500);
+}
+
+.h2-med {
+  @include typo(40, 500);
+}
+
+.h3-med {
+  @include typo(32, 500);
+}
+
+.h4-med {
+  @include typo(28, 500);
+}
+
+.h5-med {
+  @include typo(24, 500);
+}
+
+.h1-bold {
+  @include typo(48, 700);
+}
+
+.h2-bold {
+  @include typo(40, 700);
+}
+
+.h3-bold {
+  @include typo(32, 700);
+}
+
+.h4-bold {
+  @include typo(28, 700);
+}
+
+.h5-bold {
+  @include typo(24, 700);
+}
+
+// Title Classes
+.title1-reg {
+  @include typo(18, 400);
+}
+
+.title2-reg {
+  @include typo(16, 400);
+}
+
+.title1-med {
+  @include typo(18, 500);
+}
+
+.title2-med {
+  @include typo(16, 500);
+}
+
+.title1-bold {
+  @include typo(18, 700);
+}
+
+.title2-bold {
+  @include typo(16, 700);
+}
+
+// Body and Caption
+.body-reg {
+  @include typo(14, 400);
+}
+
+.body-med {
+  @include typo(14, 500);
+}
+
+.body-bold {
+  @include typo(14, 700);
+}
+
+.caption-reg {
+  @include typo(12, 400);
+}
+
+.caption-med {
+  @include typo(12, 500);
+}
+
+.caption-bold {
+  @include typo(12, 700);
+}

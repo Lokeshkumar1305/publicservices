@@ -1,0 +1,119 @@
+<mat-sidenav-container class="app-container" autosize>
+  <mat-sidenav mode="side" opened class="app-sidenav">
+    <app-sidenav></app-sidenav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-content d-flex flex-column">
+    <!-- Top Header inside content area -->
+    <header
+      class="content-header px-4 d-flex align-items-center justify-content-between bg-white border-bottom shadow-sm"
+    >
+      <!-- Left side: Breadcrumbs -->
+      <div class="header-left d-flex align-items-center gap-2">
+        <span class="breadcrumb-item text-muted">Command Center</span>
+        <mat-icon class="breadcrumb-separator text-muted">chevron_right</mat-icon>
+        <span class="breadcrumb-item breadcrumb-active fw-bold text-dark">Home</span>
+      </div>
+
+      <!-- Right side: Search, Icons, Profile -->
+      <div class="header-right d-flex align-items-center gap-3">
+        <!-- Search Box -->
+        <div
+          class="search-box-v2 d-flex align-items-center bg-transparent border rounded-2 px-3 py-1"
+        >
+          <mat-icon class="text-muted" style="font-size: 20px; width: 20px; height: 20px"
+            >search</mat-icon
+          >
+          <input
+            type="text"
+            placeholder="Search..."
+            class="border-0 bg-transparent ms-2 outline-none"
+            style="font-size: 14px; width: 180px"
+          />
+        </div>
+
+        <!-- Icons -->
+        <div class="d-flex align-items-center gap-1">
+          <button mat-icon-button class="text-muted custom-icon-btn" matTooltip="Settings">
+            <mat-icon style="font-size: 22px">settings</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="text-muted custom-icon-btn position-relative"
+            matTooltip="Notifications"
+          >
+            <mat-icon style="font-size: 22px">notifications_none</mat-icon>
+            <span class="notification-badge"></span>
+          </button>
+        </div>
+
+        <!-- Divider -->
+        <div class="vertical-divider mx-1"></div>
+
+        <!-- Profile Section -->
+        <div
+          class="profile-section d-flex align-items-center gap-2 clickable"
+          [matMenuTriggerFor]="profileMenu"
+        >
+          <div *ngIf="user.avatar; else headerInitials" class="d-flex align-items-center">
+            <img
+              [src]="user.avatar"
+              alt="Profile"
+              class="profile-avatar rounded-circle border"
+              width="36"
+              height="36"
+            />
+          </div>
+          <ng-template #headerInitials>
+            <div class="profile-initials-small">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+          <div class="profile-info d-flex flex-column justify-content-center">
+            <span class="profile-name fw-bold text-dark" style="font-size: 13px; line-height: 1.1">
+              {{ user.name }}
+            </span>
+            <div class="d-flex align-items-center gap-1">
+              <span class="profile-role text-muted" style="font-size: 11px; line-height: 1.1">
+                {{ user.role }}
+              </span>
+              <mat-icon class="text-muted" style="font-size: 14px; width: 14px; height: 14px"
+                >keyboard_arrow_down</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Menu -->
+        <mat-menu #profileMenu="matMenu" xPosition="before" class="mt-2">
+          <button mat-menu-item>
+            <mat-icon>person</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>Account Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item class="text-danger">
+            <mat-icon class="text-danger">logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow-1 overflow-auto">
+      <div class="p-4">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+
+    <footer class="p-3 text-center border-top bg-white">
+      <span class="caption-reg text-muted"
+        >© 2026 Professional Services. Built with precision.</span
+      >
+    </footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

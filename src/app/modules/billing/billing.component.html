@@ -1,0 +1,103 @@
+<div class="billing-module p-2">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2-bold text-dark mb-1">Billing & Revenue Engine</h1>
+      <p class="body-reg text-muted">MBS Integration: Automated Rating, Proration & Rev-Rec</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="ps-btn ps-btn-outline">
+        <mat-icon class="me-2">settings_suggest</mat-icon>
+        RATING RULES
+      </button>
+      <button class="ps-btn ps-btn-primary">
+        <mat-icon class="me-2">receipt</mat-icon>
+        RUN BILLING CYCLE
+      </button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-8">
+      <mat-card class="border-0 shadow-sm p-4">
+        <h3 class="h4-bold mb-3">Pending Billable Items</h3>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="bg-light">
+              <tr class="caption-bold text-muted text-uppercase">
+                <th>Reference</th>
+                <th>Client</th>
+                <th>Service / Description</th>
+                <th>Amount</th>
+                <th>State</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of billableItems">
+                <td class="caption-bold text-muted">{{ item.id }}</td>
+                <td class="body-med">{{ item.client }}</td>
+                <td>
+                  <span class="body-reg">{{ item.description }}</span
+                  ><br />
+                  <span class="badge bg-light text-dark border caption-reg">{{ item.type }}</span>
+                </td>
+                <td class="body-bold text-dark">${{ item.amount | number: '1.2-2' }}</td>
+                <td>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="
+                      item.status === 'Pending'
+                        ? 'bg-warning-subtle text-warning'
+                        : 'bg-success-subtle text-success'
+                    "
+                  >
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button
+                    class="ps-btn ps-btn-primary py-1 px-3 caption-bold"
+                    *ngIf="item.status === 'Pending'"
+                    (click)="generateInvoice(item)"
+                  >
+                    INVOICE
+                  </button>
+                  <mat-icon class="text-success" *ngIf="item.status === 'Invoiced'"
+                    >cloud_done</mat-icon
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="col-md-4">
+      <!-- Financial Summary Engine -->
+      <mat-card class="border-0 shadow-sm p-4 h-100 bg-light">
+        <h3 class="h4-bold mb-4">Financial Engine Insight</h3>
+
+        <div class="mb-4">
+          <div class="caption-bold text-muted text-uppercase mb-2">Revenue Recognition</div>
+          <div
+            class="d-flex justify-content-between align-items-center p-2 bg-white rounded-3 mb-2 border"
+          >
+            <span class="body-reg">Accrued Rev</span>
+            <span class="body-bold text-success">$42,500.00</span>
+          </div>
+          <p class="caption-reg text-muted">
+            Invoices generated trigger immediate accrual in Toucan GL.
+          </p>
+        </div>
+
+        <div>
+          <div class="caption-bold text-muted text-uppercase mb-2">Proration Engine</div>
+          <div class="p-3 border-start border-4 border-primary-active bg-white rounded-end-3">
+            <span class="body-med text-dark">Mid-cycle adjustment activefor 12 tenants.</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

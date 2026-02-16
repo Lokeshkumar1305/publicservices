@@ -1,0 +1,221 @@
+<div class="onboarding-module p-4">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h1 class="h1-bold text-dark mb-1">Firm Management Console</h1>
+      <p class="body-reg text-muted">
+        Provision new tenant environments and manage industry-specific configurations.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <button mat-stroked-button color="primary">ENVIRONMENT STATUS</button>
+      <button mat-flat-button color="primary">SYSTEM LOGS</button>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <mat-card class="border-0 shadow-sm overflow-hidden">
+        <mat-horizontal-stepper #stepper linear="false" class="custom-stepper">
+          <!-- Step 1: Industry & Basics -->
+          <mat-step>
+            <ng-template matStepLabel>Firm Basics</ng-template>
+            <div class="p-4">
+              <h3 class="h4-bold mb-4">Account Provisioning</h3>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Firm Name</mat-label>
+                    <input
+                      matInput
+                      [(ngModel)]="provisioning.firmName"
+                      placeholder="e.g. Zeste Law Group"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Industry / Vertical</mat-label>
+                    <mat-select [(ngModel)]="provisioning.industry">
+                      <mat-option value="Law Firm">Law Firm (Legal Services)</mat-option>
+                      <mat-option value="Contracting">Contracting (Construction/HVAC)</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div
+                class="market-insight p-3 bg-light rounded-3 mt-4 border-start border-primary-active border-3"
+              >
+                <div class="d-flex align-items-center mb-2">
+                  <mat-icon class="text-primary-active me-2">auto_awesome</mat-icon>
+                  <span class="caption-bold">PROVISIONING INSIGHT</span>
+                </div>
+                <p class="caption-reg text-muted mb-0">
+                  Selecting <strong>{{ provisioning.industry }}</strong> will automatically inject a
+                  pre-validated schema to your dedicated MongoDB shard.
+                </p>
+              </div>
+
+              <div class="d-flex justify-content-end mt-4">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  matStepperNext
+                  [disabled]="!provisioning.firmName"
+                >
+                  NEXT: CONFIG PREVIEW
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Step 2: Starter Pack Preview -->
+          <mat-step>
+            <ng-template matStepLabel>Configuration</ng-template>
+            <div class="p-4">
+              <h3 class="h4-bold mb-1">Pre-Loaded 'Starter Pack'</h3>
+              <p class="body-reg text-muted mb-4">
+                Review the automated defaults for the {{ provisioning.industry }} profile.
+              </p>
+
+              <div class="row g-3">
+                <div class="col-md-6" *ngFor="let pack of currentStarterPack">
+                  <div class="p-3 border rounded-3 bg-white h-100">
+                    <div class="caption-bold text-muted text-uppercase mb-2">{{ pack.type }}</div>
+                    <ul class="list-unstyled mb-0">
+                      <li
+                        *ngFor="let item of pack.items"
+                        class="caption-med d-flex align-items-center mb-1"
+                      >
+                        <mat-icon
+                          class="text-success me-2"
+                          style="font-size: 14px; width: 14px; height: 14px"
+                          >check_circle</mat-icon
+                        >
+                        {{ item }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 p-3 bg-primary-subtle rounded-3">
+                <h6 class="caption-bold mb-2">ADAPTIVE DATA FIELDS (SCHEMA PREVIEW)</h6>
+                <div class="table-responsive">
+                  <table class="table table-sm mb-0">
+                    <thead>
+                      <tr class="caption-reg">
+                        <th>Logical Field</th>
+                        <th>Tenant Mapping</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let f of adaptiveFieldsPreview">
+                        <td class="caption-med text-muted">{{ f.label }}</td>
+                        <td class="caption-bold">{{ f.value }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end mt-4 gap-2">
+                <button mat-button matStepperPrevious>BACK</button>
+                <button mat-flat-button color="primary" matStepperNext>NEXT: BRANDING</button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- Step 3: Branding -->
+          <mat-step>
+            <ng-template matStepLabel>Branding</ng-template>
+            <div class="p-4">
+              <h3 class="h4-bold mb-4">White-Label Sovereignty</h3>
+              <div class="row g-4 align-items-center">
+                <div class="col-md-6">
+                  <p class="body-reg text-muted">
+                    Configure the visual identity for <strong>{{ provisioning.firmName }}</strong
+                    >'s dedicated portals.
+                  </p>
+                  <mat-form-field appearance="outline" class="w-100 mb-3">
+                    <mat-label>Primary Brand Color</mat-label>
+                    <input matInput type="color" [(ngModel)]="provisioning.branding.primaryColor" />
+                  </mat-form-field>
+                  <label class="caption-bold d-block mb-2">Portal Logo Scale (%)</label>
+                  <div class="d-flex align-items-center gap-3">
+                    <input
+                      type="range"
+                      class="form-range"
+                      min="50"
+                      max="150"
+                      [(ngModel)]="provisioning.branding.logoScale"
+                    />
+                    <span class="caption-bold">{{ provisioning.branding.logoScale }}%</span>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="branding-preview border rounded-3 p-4 bg-light">
+                    <div
+                      class="preview-header mb-3"
+                      [style.backgroundColor]="provisioning.branding.primaryColor"
+                    ></div>
+                    <mat-icon
+                      [style.fontSize.px]="48"
+                      [style.width.px]="48"
+                      [style.height.px]="48"
+                      class="text-muted"
+                      [style.transform]="'scale(' + provisioning.branding.logoScale / 100 + ')'"
+                      >business</mat-icon
+                    >
+                    <div class="mt-2 caption-bold">{{ provisioning.firmName || 'Firm Name' }}</div>
+                  </div>
+                  <small class="text-muted d-block mt-2">Dynamic White-Label Preview</small>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end mt-5 gap-2">
+                <button mat-button matStepperPrevious>BACK</button>
+                <button mat-flat-button color="accent" (click)="deployFirm()">
+                  DEPLOY INFRASTRUCTURE
+                </button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </mat-card>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="d-flex flex-column gap-4">
+        <mat-card class="border-0 shadow-sm p-4 bg-dark text-white">
+          <h3 class="h4-bold mb-3 text-white">Value Proposition</h3>
+          <div *ngFor="let item of marketContext" class="mb-4 last-child-mb-0">
+            <div class="d-flex gap-3">
+              <mat-icon class="text-primary-active">verified</mat-icon>
+              <div>
+                <div class="body-bold">{{ item.title }}</div>
+                <div class="caption-reg opacity-75">{{ item.desc }}</div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="border-0 shadow-sm p-4 border-top border-primary-active border-4">
+          <h3 class="h4-bold mb-3">Provisioning Stack</h3>
+          <div class="stack-item d-flex justify-content-between mb-2">
+            <span class="caption-reg">Core Architecture</span>
+            <span class="badge bg-light text-dark border">Micro-Modular</span>
+          </div>
+          <div class="stack-item d-flex justify-content-between mb-2">
+            <span class="caption-reg">DB Isolation</span>
+            <span class="badge bg-light text-dark border">Multi-Tenant (Shard)</span>
+          </div>
+          <div class="stack-item d-flex justify-content-between">
+            <span class="caption-reg">Deployment Layer</span>
+            <span class="badge bg-light text-dark border">Event Backbone</span>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

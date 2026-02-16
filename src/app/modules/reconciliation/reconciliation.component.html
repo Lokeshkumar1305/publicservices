@@ -1,0 +1,110 @@
+<div class="recon-module p-2">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2-bold text-dark mb-1">Reconciliation Engine</h1>
+      <p class="body-reg text-muted">Toucan Reuse Layer: 3-Way Matching & Settlement Integrity</p>
+    </div>
+    <button class="ps-btn ps-btn-primary">
+      <mat-icon class="me-2">upload_file</mat-icon>
+      INGEST SETTLEMENT FILE
+    </button>
+  </div>
+
+  <!-- Recon Stats -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <mat-card class="border-0 shadow-sm p-4 text-center">
+        <div class="caption-bold text-muted text-uppercase mb-1">Match Rate</div>
+        <div class="h3-bold text-success">{{ stats.matchedRate }}%</div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="stats.matchedRate"
+          class="mt-2"
+        ></mat-progress-bar>
+      </mat-card>
+    </div>
+    <div class="col-md-3">
+      <mat-card class="border-0 shadow-sm p-4 text-center">
+        <div class="caption-bold text-muted text-uppercase mb-1">Exceptions</div>
+        <div class="h3-bold text-danger">{{ stats.exceptions }}</div>
+        <div class="caption-reg text-muted mt-2">Requires Manual Action</div>
+      </mat-card>
+    </div>
+    <div class="col-md-3">
+      <mat-card class="border-0 shadow-sm p-4 text-center">
+        <div class="caption-bold text-muted text-uppercase mb-1">Pending Settlement</div>
+        <div class="h3-bold text-dark">{{ stats.pendingSettlement }}</div>
+        <div class="caption-reg text-muted mt-2">In Transit / Gateway</div>
+      </mat-card>
+    </div>
+    <div class="col-md-3">
+      <mat-card class="border-0 shadow-sm p-4 text-center">
+        <div class="caption-bold text-muted text-uppercase mb-1">Total Processed</div>
+        <div class="h3-bold text-primary-active">{{ stats.totalProcessed }}</div>
+        <div class="caption-reg text-muted mt-2">Last 30 Days</div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12">
+      <mat-card class="border-0 shadow-sm p-4">
+        <h3 class="h4-bold mb-3">Matching Status (Invoice vs Gateway vs Bank)</h3>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="bg-light">
+              <tr class="caption-bold text-muted">
+                <th>RECON ID</th>
+                <th>INVOICE REF</th>
+                <th>AMOUNT</th>
+                <th>GATEWAY SYNC</th>
+                <th>BANK SETTLEMENT</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of reconData">
+                <td class="caption-bold text-muted">{{ item.id }}</td>
+                <td class="body-med text-primary-active">{{ item.invoiceId }}</td>
+                <td class="body-bold">${{ item.amount | number: '1.2-2' }}</td>
+                <td>
+                  <mat-icon [ngClass]="item.gatewayMatch ? 'text-success' : 'text-danger'">{{
+                    item.gatewayMatch ? 'check_circle' : 'cancel'
+                  }}</mat-icon>
+                </td>
+                <td>
+                  <mat-icon [ngClass]="item.bankMatch ? 'text-success' : 'text-danger'">{{
+                    item.bankMatch ? 'check_circle' : 'cancel'
+                  }}</mat-icon>
+                </td>
+                <td>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="
+                      item.status === 'Matched'
+                        ? 'bg-success-subtle text-success'
+                        : 'bg-danger-subtle text-danger'
+                    "
+                  >
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    *ngIf="item.status === 'Exception'"
+                    (click)="resolveException(item)"
+                  >
+                    <mat-icon>build</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

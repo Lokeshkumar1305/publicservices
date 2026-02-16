@@ -1,0 +1,86 @@
+<div class="inventory-module p-2">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2-bold text-dark mb-1">Inventory Management</h1>
+      <p class="body-reg text-muted">Field Service Material Tracking & Billing Integration</p>
+    </div>
+    <button class="ps-btn ps-btn-primary">
+      <mat-icon class="me-2">add</mat-icon>
+      ADD NEW MATERIAL
+    </button>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-8">
+      <mat-card class="border-0 shadow-sm p-4">
+        <h3 class="h4-bold mb-3">Live Stock Tracker</h3>
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="bg-light">
+              <tr class="caption-bold text-muted">
+                <th>ITEM NAME</th>
+                <th>AVAILABLE STOCK</th>
+                <th>COST/UNIT</th>
+                <th>STATUS</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of inventoryItems">
+                <td class="body-med">{{ item.name }}</td>
+                <td>{{ item.stock }} {{ item.unit }}</td>
+                <td>${{ item.cost | number: '1.2-2' }}</td>
+                <td>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="
+                      item.status === 'In Stock'
+                        ? 'bg-success-subtle text-success'
+                        : 'bg-warning-subtle text-warning'
+                    "
+                  >
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    mat-icon-button
+                    (click)="consumeItem(item)"
+                    title="Consume for Work Order"
+                  >
+                    <mat-icon class="text-primary-active">handyman</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="col-md-4">
+      <mat-card class="border-0 shadow-sm p-4 bg-primary-900 text-white">
+        <h3 class="h4-bold mb-3">ERP Integration Insight</h3>
+        <div class="mb-4">
+          <div class="caption-bold text-muted text-uppercase mb-2">REUSE LAYER: NEWFoundation</div>
+          <p class="body-reg opacity-75">
+            When items are consumed here, they are automatically piped to Toucan's
+            <strong>MBS Billing</strong> as line items and <strong>Accounting GL</strong> for COGS
+            calculation.
+          </p>
+        </div>
+
+        <div class="border-top border-secondary pt-3 mt-3">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="caption-reg">Total Material Value</span>
+            <span class="body-bold">$8,450.00</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="caption-reg">Backbone Sync Health</span>
+            <span class="text-success body-bold">Optimal</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
