@@ -1,87 +1,148 @@
 @import '../../../styles/palette';
 
-.onboarding-module {
-  background-color: #f8fafc;
-  min-height: calc(100vh - 64px);
+.onboarding-screen {
+  background-color: #fcfdfe;
+  min-height: 100vh;
 }
 
-.custom-stepper {
-  background: transparent !important;
+.search-box {
+  width: 250px;
 
-  ::ng-deep .mat-step-header {
-    background: white;
-    padding: 24px !important;
-    border-bottom: 1px solid #f1f5f9;
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
 
-    &:hover {
-      background-color: #f8fafc !important;
+  input {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0 !important;
+    font-size: 13px;
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+      border-color: #6366f1 !important;
     }
   }
-
-  ::ng-deep .mat-horizontal-stepper-content {
-    background: white;
-  }
 }
 
-.branding-preview {
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+.filter-tabs {
+  border: 1px solid #e2e8f0;
 
-  .preview-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 12px;
-    transition: background-color 0.3s ease;
-  }
+  .filter-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    min-width: 60px;
+    height: 32px;
+    line-height: 32px;
 
-  mat-icon {
-    transition: transform 0.2s ease;
-  }
-}
-
-.provision-note {
-  background: #f5f3ff;
-  color: #4f46e5;
-  padding: 1.25rem;
-  border-radius: 12px;
-  border: 1px solid #ddd6fe;
-}
-
-.market-insight {
-  border-left: 4px solid #4f46e5 !important;
-  background: #f8fafc;
-}
-
-.badge {
-  font-weight: 500;
-  padding: 0.4rem 0.8rem;
-}
-
-.last-child-mb-0 {
-  &:last-child {
-    margin-bottom: 0 !important;
+    &.active {
+      background-color: #ffffff !important;
+      color: #1e293b;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
 .table {
-  th {
-    border: none;
-    text-transform: uppercase;
-    color: #64748b;
+  thead th {
+    background-color: #fcfdfe;
+    padding: 16px 12px;
+    border-bottom: 1px solid #f1f5f9;
     font-size: 11px;
-    letter-spacing: 0.5px;
-    padding-bottom: 12px;
   }
 
-  td {
-    border-color: rgba(0, 0, 0, 0.03);
-    padding: 12px 0;
+  tbody td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #f8fafc;
+    font-size: 13px;
   }
+
+  tbody tr:hover {
+    background-color: #fcfdfe;
+  }
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &.pending {
+    background-color: #f1f5f9;
+    color: #475569;
+  }
+
+  &.in-progress {
+    background-color: #eef2ff;
+    color: #6366f1;
+  }
+
+  &.completed {
+    background-color: #f0fdf4;
+    color: #15803d;
+  }
+}
+
+.text-indigo {
+  color: #6366f1;
+}
+
+// Modal Styles
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-container {
+  width: 650px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modal-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modal-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+  border: 1px solid #e2e8f0 !important;
+  font-size: 13px;
+
+  &:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+  }
+}
+
+textarea {
+  resize: none;
 }

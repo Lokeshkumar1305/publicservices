@@ -1,0 +1,159 @@
+<div class="bookings-screen p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2-bold text-dark mb-1">Bookings</h1>
+            <p class="body-reg text-muted mb-0">{{ filteredBookings.length }} of {{ allBookings.length }} bookings</p>
+        </div>
+        <div class="d-flex gap-3 align-items-center">
+            <div class="search-box position-relative">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input type="text" placeholder="Search bookings..."
+                    class="form-control ps-5 rounded-3 border-light shadow-sm">
+            </div>
+
+            <!-- Status Filters -->
+            <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'all'"
+                    (click)="filterBookings('all')">All</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'pending'"
+                    (click)="filterBookings('pending')">Pending</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'confirmed'"
+                    (click)="filterBookings('confirmed')">Confirmed</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'completed'"
+                    (click)="filterBookings('completed')">Completed</button>
+            </div>
+
+            <button mat-stroked-button class="rounded-3 px-3 shadow-sm border-light">
+                <mat-icon class="me-1">download</mat-icon> Export
+            </button>
+            <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleNewBookingModal()">
+                <mat-icon class="me-1">add</mat-icon> New Booking
+            </button>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4" style="width: 50px;">
+                            <mat-checkbox color="primary"></mat-checkbox>
+                        </th>
+                        <th class="caption-bold text-muted text-uppercase">Client</th>
+                        <th class="caption-bold text-muted text-uppercase">Service</th>
+                        <th class="caption-bold text-muted text-uppercase">Date</th>
+                        <th class="caption-bold text-muted text-uppercase">Time</th>
+                        <th class="caption-bold text-muted text-uppercase text-center">Status</th>
+                        <th class="caption-bold text-muted text-uppercase">Amount</th>
+                        <th class="caption-bold text-muted text-uppercase text-center">Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let b of filteredBookings" class="align-middle">
+                        <td class="ps-4">
+                            <mat-checkbox color="primary" [(ngModel)]="b.selected"></mat-checkbox>
+                        </td>
+                        <td class="body-bold text-dark">{{ b.client }}</td>
+                        <td class="body-reg text-muted">{{ b.service }}</td>
+                        <td class="body-reg text-muted">{{ b.date }}</td>
+                        <td class="body-reg text-muted">{{ b.time }}</td>
+                        <td class="text-center">
+                            <span class="badge status-badge" [ngClass]="b.status">
+                                {{ b.status }}
+                            </span>
+                        </td>
+                        <td class="body-bold text-dark">{{ b.amount }}</td>
+                        <td class="text-center">
+                            <span class="badge payment-badge" [ngClass]="b.payment">
+                                {{ b.payment }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card>
+
+    <!-- New Booking Modal -->
+    <div class="modal-overlay" *ngIf="showNewBookingModal" (click)="toggleNewBookingModal()">
+        <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="title1-bold m-0">New Booking</h2>
+                <button mat-icon-button (click)="toggleNewBookingModal()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Client Name *</label>
+                    <input type="text" class="form-control rounded-3" [(ngModel)]="newBooking.clientName"
+                        placeholder="Enter name">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Email</label>
+                    <input type="email" class="form-control rounded-3" [(ngModel)]="newBooking.email"
+                        placeholder="Enter email">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Service</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newBooking.service">
+                        <option value="" disabled selected>Select service</option>
+                        <option *ngFor="let s of services" [value]="s">{{ s }}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Amount</label>
+                    <input type="number" class="form-control rounded-3" [(ngModel)]="newBooking.amount"
+                        placeholder="0.00">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Date *</label>
+                    <div class="position-relative">
+                        <input matInput [matDatepicker]="picker" class="form-control rounded-3"
+                            [(ngModel)]="newBooking.date" placeholder="dd-mm-yyyy">
+                        <mat-datepicker-toggle matSuffix [for]="picker"
+                            class="position-absolute end-0 top-0"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Time Slot</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newBooking.timeSlot">
+                        <option value="" disabled selected>Select time</option>
+                        <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Status</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newBooking.status">
+                        <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Payment</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newBooking.payment">
+                        <option *ngFor="let p of paymentStatuses" [value]="p">{{ p }}</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <label class="form-label caption-bold text-dark">Notes</label>
+                    <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newBooking.notes"
+                        placeholder="Add any details here..."></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                <button mat-button class="rounded-3 px-4" (click)="toggleNewBookingModal()">Cancel</button>
+                <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createBooking()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

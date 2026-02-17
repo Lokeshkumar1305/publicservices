@@ -1,0 +1,154 @@
+<div class="service-catalog-screen p-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2-bold text-dark mb-1">Service Catalog</h1>
+      <p class="body-reg text-muted mb-0">{{ services.length }} of {{ services.length }} services</p>
+    </div>
+    <div class="d-flex gap-3 align-items-center">
+      <div class="search-box position-relative">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Search services..." class="form-control ps-5 rounded-3 border-light shadow-sm">
+      </div>
+
+      <button mat-stroked-button class="rounded-3 px-3 shadow-sm border-light">
+        <mat-icon class="me-1">download</mat-icon> Export
+      </button>
+      <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleAddModal()">
+        <mat-icon class="me-1">add</mat-icon> Add Service
+      </button>
+    </div>
+  </div>
+
+  <!-- Service Cards Grid -->
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let service of services; let i = index">
+      <mat-card
+        class="service-card border-0 shadow-sm rounded-4 h-100 overflow-hidden position-relative animate-fade-in"
+        [style.animation-delay]="i * 0.05 + 's'">
+        <div class="p-4">
+          <!-- Card Header Icons -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="service-icon-bg d-flex align-items-center justify-content-center">
+              <mat-icon class="text-indigo">attach_money</mat-icon>
+            </div>
+            <div class="card-actions">
+              <button mat-icon-button class="text-muted btn-sm" (click)="$event.stopPropagation()">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px">edit</mat-icon>
+              </button>
+              <button mat-icon-button class="text-danger btn-sm" (click)="deleteService(i); $event.stopPropagation()">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px">delete_outline</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <h3 class="title2-bold text-dark mb-0">{{ service.name }}</h3>
+            <p class="caption-reg text-muted">{{ service.category }}</p>
+          </div>
+
+          <p class="body-reg text-dark mb-3 service-desc">
+            {{ service.description }}
+          </p>
+
+          <hr class="my-3 border-light-subtle">
+
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-column">
+              <div class="h3-bold text-dark">
+                ${{ service.price }}<span class="body-reg text-muted" *ngIf="service.type === 'Hourly'">/hr</span>
+              </div>
+              <div class="badge discount-badge mt-1" *ngIf="service.discount">
+                {{ service.discount }}
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-muted">
+              <div class="d-flex align-items-center gap-1">
+                <mat-icon style="font-size: 16px; width: 16px; height: 16px">schedule</mat-icon>
+                <span class="caption-med">{{ service.duration }}</span>
+              </div>
+              <div class="service-visibility-icon" [class.active]="service.public">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px">{{ service.public ? 'visibility' :
+                  'visibility_off' }}</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- New Service Modal -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="toggleAddModal()">
+    <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="title1-bold m-0">New Service</h2>
+        <button mat-icon-button (click)="toggleAddModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label caption-bold text-dark">Name *</label>
+          <input type="text" class="form-control rounded-3" [(ngModel)]="newService.name" placeholder="Service name">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Price *</label>
+          <input type="number" class="form-control rounded-3" [(ngModel)]="newService.price" placeholder="0.00">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Price Type</label>
+          <select class="form-select rounded-3" [(ngModel)]="newService.type">
+            <option value="Fixed">Fixed</option>
+            <option value="Hourly">Hourly</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Category</label>
+          <select class="form-select rounded-3" [(ngModel)]="newService.category">
+            <option value="" disabled selected>Select category</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Duration (min)</label>
+          <input type="number" class="form-control rounded-3" [(ngModel)]="newService.duration">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Tax Rate (%)</label>
+          <input type="number" class="form-control rounded-3" [(ngModel)]="newService.taxRate" placeholder="0">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Discount (%)</label>
+          <input type="number" class="form-control rounded-3" [(ngModel)]="newService.discount" placeholder="0">
+        </div>
+
+        <div class="col-12 mt-3">
+          <label class="form-label caption-bold text-dark">Description</label>
+          <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newService.description"
+            placeholder="Service description..."></textarea>
+        </div>
+
+        <div class="col-12 d-flex gap-4 mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <mat-slide-toggle color="primary" [(ngModel)]="newService.public"></mat-slide-toggle>
+            <span class="body-med text-dark">Public</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <mat-slide-toggle color="primary" [(ngModel)]="newService.active"></mat-slide-toggle>
+            <span class="body-med text-dark">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+        <button mat-button class="rounded-3 px-4" (click)="toggleAddModal()">Cancel</button>
+        <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createService()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

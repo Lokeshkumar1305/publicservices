@@ -1,51 +1,46 @@
 <aside class="sidenav d-flex flex-column h-100">
   <!-- Logo Section -->
-  <div class="logo-section p-4 mb-4 d-flex align-items-center">
+  <div class="logo-section p-4 mb-2 d-flex align-items-center">
     <div class="logo-icon d-flex align-items-center justify-content-center">
       <img src="assets/logo.svg" alt="Toucan Logo" height="38" />
     </div>
   </div>
 
-  <!-- Menu Section -->
-  <div class="menu-sections flex-grow-1 overflow-auto custom-scrollbar px-3">
+  <!-- Menu Sections (Scrollable Area) -->
+  <div class="menu-sections flex-grow-1 overflow-auto custom-scrollbar">
     <div *ngFor="let group of menuGroups" class="mb-4">
-      <div class="group-header caption-reg text-uppercase mb-2 px-3 d-flex align-items-center">
-        {{ group.name }}
-        <div class="flex-grow-1 ms-2 border-bottom border-secondary opacity-10"></div>
+      <div class="group-header d-flex align-items-center px-4 mb-3">
+        <span class="group-title">{{ group.name }}</span>
+        <div class="group-line ms-2 flex-grow-1"></div>
       </div>
 
       <div class="menu-items">
-        <div
-          *ngFor="let item of group.items"
-          class="menu-item d-flex align-items-center justify-content-between p-3 rounded-3 mb-1 clickable"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' || item.route === '/' }"
-        >
+        <a *ngFor="let item of group.items"
+          class="menu-item d-flex align-items-center justify-content-between clickable decoration-none"
+          [routerLink]="item.route" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' || item.route === '/' }">
           <div class="d-flex align-items-center">
-            <mat-icon class="me-3">{{ item.icon }}</mat-icon>
-            <span class="body-med">{{ item.name }}</span>
+            <mat-icon class="item-icon me-3">{{ item.icon }}</mat-icon>
+            <span class="item-name text-nowrap">{{ item.name }}</span>
           </div>
-          <div class="active-dot"></div>
-        </div>
+          <div class="active-indicator">
+            <div class="active-dot"></div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- User Section -->
-  <div class="user-section p-3 mx-3 mb-4 rounded-4 d-flex align-items-center clickable">
-    <div class="user-avatar me-3">
-      <img
-        [src]="user.avatar || 'https://via.placeholder.com/40'"
-        [alt]="user.name"
-        class="rounded-circle"
-        width="40"
-        height="40"
-      />
-    </div>
-    <div class="user-info overflow-hidden">
-      <div class="body-bold text-white text-truncate">{{ user.name }}</div>
-      <div class="caption-reg text-muted text-truncate">{{ user.email }}</div>
+  <!-- User Profile Section at Bottom -->
+  <div class="user-profile-wrapper p-3">
+    <div class="user-profile p-3 d-flex align-items-center clickable">
+      <div class="avatar-container me-3">
+        <img [src]="user.avatar" [alt]="user.name" class="rounded-circle shadow-sm" width="42" height="42">
+      </div>
+      <div class="user-info overflow-hidden">
+        <div class="user-name body-bold text-truncate">{{ user.name }}</div>
+        <div class="user-email caption-reg text-truncate">{{ user.email }}</div>
+      </div>
     </div>
   </div>
 </aside>

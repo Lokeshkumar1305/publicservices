@@ -1,20 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatMenuModule } from '@angular/material/menu';
-import { EventBackboneService } from '../../core/services/event-backbone.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule } from '@angular/forms';
 
 export interface Case {
-  id: string;
+  title: string;
   client: string;
-  serviceType: string;
-  status: 'Open' | 'In Progress' | 'Completed' | 'Invoiced';
-  createdAt: Date;
-  amount: number;
+  status: 'open' | 'in progress' | 'pending review' | 'resolved';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  assignedTo: string;
+  due: string;
+  created: string;
+  selected?: boolean;
 }
 
 @Component({
@@ -23,84 +28,84 @@ export interface Case {
   imports: [
     CommonModule,
     MatCardModule,
-    MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
-    MatMenuModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    FormsModule
   ],
   templateUrl: './cases.component.html',
   styleUrl: './cases.component.scss',
 })
 export class CasesComponent implements OnInit {
-  cases: Case[] = [
-    {
-      id: 'CASE-101',
-      client: 'Grand Plaza Hotel',
-      serviceType: 'Event Lighting',
-      status: 'In Progress',
-      createdAt: new Date(),
-      amount: 1500,
-    },
-    {
-      id: 'CASE-102',
-      client: 'Tech Hub Office',
-      serviceType: 'Network Cabling',
-      status: 'Open',
-      createdAt: new Date(),
-      amount: 2800,
-    },
-    {
-      id: 'CASE-103',
-      client: 'Skyline Residence',
-      serviceType: 'General Maintenance',
-      status: 'Completed',
-      createdAt: new Date(),
-      amount: 450,
-    },
+  activeFilter: string = 'all';
+
+  allCases: Case[] = [
+    { title: 'TechCorp Merger Agreement', client: 'Sarah Mitchell', status: 'in progress', priority: 'high', assignedTo: 'John Sterling', due: 'Mar 15, 2026', created: 'Feb 16' },
+    { title: 'Greenfield IP Dispute', client: 'James Rodriguez', status: 'open', priority: 'urgent', assignedTo: 'Maria Santos', due: 'Mar 1, 2026', created: 'Feb 16' },
+    { title: 'Chen Estate Planning', client: 'Emily Chen', status: 'pending review', priority: 'medium', assignedTo: 'Robert Kim', due: 'Apr 10, 2026', created: 'Feb 16' },
+    { title: 'Blue Edge Employment Contract', client: 'Michael Thompson', status: 'open', priority: 'low', assignedTo: 'John Sterling', due: 'Mar 20, 2026', created: 'Feb 16' },
+    { title: 'Sharma Immigration Case', client: 'Priya Sharma', status: 'in progress', priority: 'high', assignedTo: 'Maria Santos', due: 'Feb 28, 2026', created: 'Feb 16' },
+    { title: 'NovaTech NDA Review', client: 'David Park', status: 'resolved', priority: 'low', assignedTo: 'Robert Kim', due: '-', created: 'Feb 16' },
+    { title: 'Innovate Labs LLC Formation', client: 'Amanda Foster', status: 'open', priority: 'medium', assignedTo: 'John Sterling', due: 'Mar 25, 2026', created: 'Feb 16' },
   ];
 
-  constructor(private eventBackbone: EventBackboneService) {}
+  filteredCases: Case[] = [];
+  showNewCaseModal: boolean = false;
 
-  ngOnInit(): void {}
+  newCase = {
+    title: '',
+    client: '',
+    category: '',
+    status: 'open',
+    priority: 'medium',
+    assignedTo: '',
+    due: null,
+    description: ''
+  };
 
-  updateStatus(caseItem: Case, newStatus: 'Open' | 'In Progress' | 'Completed' | 'Invoiced') {
-    const oldStatus = caseItem.status;
-    caseItem.status = newStatus;
+  clients = ['Sarah Mitchell', 'James Rodriguez', 'Emily Chen', 'Michael Thompson', 'Priya Sharma', 'David Park', 'Amanda Foster'];
+  statuses = ['open', 'in progress', 'pending review', 'resolved'];
+  priorities = ['low', 'medium', 'high', 'urgent'];
 
-    // Emit Canonical Event for the Backbone
-    this.eventBackbone.emitEvent({
-      sourceModule: 'CASES',
-      eventType: 'CASE_STATUS_CHANGED',
-      tenantId: 'T-001',
-      payload: {
-        caseId: caseItem.id,
-        oldStatus,
-        newStatus,
-        client: caseItem.client,
-        impact: newStatus === 'Completed' ? 'REVENUE_ACCRUAL_PENDING' : 'NONE',
-      },
-    });
+  constructor() { }
 
-    if (newStatus === 'Completed') {
-      alert(
-        `Case ${caseItem.id} marked as Completed. Signal sent to Billing Engine for Invoice generation.`,
-      );
+  ngOnInit(): void {
+    this.filterCases('all');
+  }
+
+  filterCases(status: string) {
+    this.activeFilter = status;
+    if (status === 'all') {
+      this.filteredCases = this.allCases;
+    } else {
+      // Map filter tabs to status values
+      const map: any = { 'open': 'open', 'in progress': 'in progress', 'resolved': 'resolved' };
+      this.filteredCases = this.allCases.filter(c => c.status === map[status]);
     }
   }
 
-  getStatusClass(status: string) {
-    switch (status) {
-      case 'Open':
-        return 'bg-info-subtle text-info';
-      case 'In Progress':
-        return 'bg-primary-subtle text-primary';
-      case 'Completed':
-        return 'bg-success-subtle text-success';
-      case 'Invoiced':
-        return 'bg-secondary-subtle text-secondary';
-      default:
-        return 'bg-light';
-    }
+  toggleNewCaseModal() {
+    this.showNewCaseModal = !this.showNewCaseModal;
+  }
+
+  createCase() {
+    this.allCases.unshift({
+      title: this.newCase.title,
+      client: this.newCase.client,
+      status: this.newCase.status as any,
+      priority: this.newCase.priority as any,
+      assignedTo: this.newCase.assignedTo,
+      due: this.newCase.due ? new Date(this.newCase.due).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-',
+      created: 'Feb 17'
+    });
+    this.filterCases(this.activeFilter);
+    this.toggleNewCaseModal();
+    // Reset
+    this.newCase = { title: '', client: '', category: '', status: 'open', priority: 'medium', assignedTo: '', due: null, description: '' };
   }
 }

@@ -1,0 +1,46 @@
+<div class="modules-screen p-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <h1 class="h2-bold text-dark mb-1">Modules</h1>
+        <p class="body-reg text-muted mb-0">Enable or disable plug & play modules for your workspace</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="tabs-nav d-flex flex-wrap gap-2 mb-4">
+        <button mat-button *ngFor="let cat of categories" class="tab-btn rounded-pill px-3 py-1"
+            [class.active]="selectedCategory === cat.value" (click)="selectCategory(cat.value)">
+            {{ cat.label }}
+        </button>
+    </div>
+
+    <!-- Modules Grid -->
+    <div class="row g-4">
+        <div class="col-xl-4 col-md-6" *ngFor="let mod of filteredModules">
+            <mat-card class="module-card border-0 shadow-sm p-4 h-100 rounded-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box rounded-3 d-flex align-items-center justify-content-center"
+                            [ngClass]="'bg-' + mod.category.toLowerCase() + '-subtle'">
+                            <mat-icon [ngClass]="'text-' + mod.category.toLowerCase()">{{ mod.icon }}</mat-icon>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <span class="body-bold text-dark">{{ mod.name }}</span>
+                            <span class="badge category-badge fit-content px-2 py-0 mt-1">{{ mod.category }}</span>
+                        </div>
+                    </div>
+                    <mat-slide-toggle [(ngModel)]="mod.enabled" (change)="toggleModule(mod)"
+                        color="primary"></mat-slide-toggle>
+                </div>
+
+                <p class="caption-reg text-muted mb-4 description-text">
+                    {{ mod.description }}
+                </p>
+
+                <div class="mt-auto d-flex align-items-center text-success" *ngIf="mod.active">
+                    <mat-icon style="font-size: 14px; width: 14px; height: 14px" class="me-1">bolt</mat-icon>
+                    <span class="caption-bold">Active</span>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>

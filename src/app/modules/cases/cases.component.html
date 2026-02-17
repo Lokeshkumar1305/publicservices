@@ -1,97 +1,150 @@
-<div class="cases-module p-2">
+<div class="cases-screen p-4">
+  <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h1 class="h2-bold text-dark mb-1">Case Management (PPMS Core)</h1>
-      <p class="body-reg text-muted">Lifecycle management for Service Requests & Event Bookings</p>
+      <h1 class="h2-bold text-dark mb-1">Cases</h1>
+      <p class="body-reg text-muted mb-0">{{ filteredCases.length }} of {{ allCases.length }} cases</p>
     </div>
-    <div class="d-flex gap-2">
-      <button class="ps-btn ps-btn-outline">
-        <mat-icon class="me-2">filter_list</mat-icon>
-        FILTER
+    <div class="d-flex gap-3 align-items-center">
+      <div class="search-box position-relative">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Search cases..." class="form-control ps-5 rounded-3 border-light shadow-sm">
+      </div>
+
+      <!-- Status Filters -->
+      <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'all'"
+          (click)="filterCases('all')">All</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'open'"
+          (click)="filterCases('open')">Open</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'in progress'"
+          (click)="filterCases('in progress')">In Progress</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'resolved'"
+          (click)="filterCases('resolved')">Resolved</button>
+      </div>
+
+      <button mat-stroked-button class="rounded-3 px-3 shadow-sm border-light">
+        <mat-icon class="me-1">download</mat-icon> Export
       </button>
-      <button class="ps-btn ps-btn-primary">
-        <mat-icon class="me-2">add</mat-icon>
-        NEW BOOKING
+      <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleNewCaseModal()">
+        <mat-icon class="me-1">add</mat-icon> New Case
       </button>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-12">
-      <mat-card class="border-0 shadow-sm p-4">
-        <div class="table-responsive">
-          <table class="table align-middle">
-            <thead class="bg-light">
-              <tr class="caption-bold text-muted text-uppercase">
-                <th>Case ID</th>
-                <th>Client / Entity</th>
-                <th>Service Type</th>
-                <th>Created</th>
-                <th>Status</th>
-                <th>Amount</th>
-                <th class="text-end">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let c of cases">
-                <td class="body-bold text-primary-active">{{ c.id }}</td>
-                <td class="body-med">{{ c.client }}</td>
-                <td>
-                  <span class="caption-bold text-muted">{{ c.serviceType }}</span>
-                </td>
-                <td class="caption-reg">{{ c.createdAt | date: 'shortDate' }}</td>
-                <td>
-                  <span class="badge rounded-pill px-3 py-2" [ngClass]="getStatusClass(c.status)">
-                    {{ c.status }}
-                  </span>
-                </td>
-                <td class="body-bold">${{ c.amount | number: '1.2-2' }}</td>
-                <td class="text-end">
-                  <button mat-icon-button [matMenuTriggerFor]="menu" class="text-muted">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                  <mat-menu #menu="matMenu">
-                    <button
-                      mat-menu-item
-                      (click)="updateStatus(c, 'In Progress')"
-                      *ngIf="c.status === 'Open'"
-                    >
-                      <mat-icon>play_arrow</mat-icon>
-                      <span>Start Work</span>
-                    </button>
-                    <button
-                      mat-menu-item
-                      (click)="updateStatus(c, 'Completed')"
-                      *ngIf="c.status === 'In Progress'"
-                    >
-                      <mat-icon>check_circle</mat-icon>
-                      <span>Mark Completed</span>
-                    </button>
-                    <button mat-menu-item *ngIf="c.status === 'Completed'" class="text-success">
-                      <mat-icon>receipt</mat-icon>
-                      <span>Generate Invoice</span>
-                    </button>
-                  </mat-menu>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  <!-- Cases Table -->
+  <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th class="ps-4" style="width: 50px;">
+              <mat-checkbox color="primary"></mat-checkbox>
+            </th>
+            <th class="caption-bold text-muted text-uppercase">Case</th>
+            <th class="caption-bold text-muted text-uppercase">Client</th>
+            <th class="caption-bold text-muted text-uppercase text-center">Status</th>
+            <th class="caption-bold text-muted text-uppercase text-center">Priority</th>
+            <th class="caption-bold text-muted text-uppercase">Assigned To</th>
+            <th class="caption-bold text-muted text-uppercase">Due</th>
+            <th class="caption-bold text-muted text-uppercase">Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of filteredCases" class="align-middle">
+            <td class="ps-4">
+              <mat-checkbox color="primary" [(ngModel)]="c.selected"></mat-checkbox>
+            </td>
+            <td class="body-bold text-dark">{{ c.title }}</td>
+            <td class="body-reg text-muted">{{ c.client }}</td>
+            <td class="text-center">
+              <span class="badge status-badge" [ngClass]="c.status.replace(' ', '-')">
+                {{ c.status }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="badge priority-badge" [ngClass]="c.priority">
+                {{ c.priority }}
+              </span>
+            </td>
+            <td class="body-reg text-muted">{{ c.assignedTo }}</td>
+            <td class="body-reg text-muted">{{ c.due }}</td>
+            <td class="caption-reg text-muted">{{ c.created }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
+
+  <!-- New Case Modal -->
+  <div class="modal-overlay" *ngIf="showNewCaseModal" (click)="toggleNewCaseModal()">
+    <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="title1-bold m-0">New Case</h2>
+        <button mat-icon-button (click)="toggleNewCaseModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label caption-bold text-dark">Title *</label>
+          <input type="text" class="form-control rounded-3" [(ngModel)]="newCase.title" placeholder="Case title">
         </div>
-      </mat-card>
-    </div>
-  </div>
 
-  <!-- Engine Insight Footer -->
-  <div class="mt-4 p-3 bg-white border rounded-3 d-flex align-items-center">
-    <div class="bg-primary-active text-white p-2 rounded-circle me-3">
-      <mat-icon>info</mat-icon>
-    </div>
-    <div class="body-reg text-muted">
-      <strong>Enterprise Logic:</strong> Status transitions emit events to the
-      <strong>Toucan Event Backbone</strong>. Marking a case "Completed" automatically triggers the
-      <strong>Revenue Recognition</strong> logic for financial compliance.
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Client</label>
+          <select class="form-select rounded-3" [(ngModel)]="newCase.client">
+            <option value="" disabled selected>Select client</option>
+            <option *ngFor="let c of clients" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Category</label>
+          <input type="text" class="form-control rounded-3" [(ngModel)]="newCase.category"
+            placeholder="e.g. Legal, Support">
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Status</label>
+          <select class="form-select rounded-3" [(ngModel)]="newCase.status">
+            <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Priority</label>
+          <select class="form-select rounded-3" [(ngModel)]="newCase.priority">
+            <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Assigned To</label>
+          <input type="text" class="form-control rounded-3" [(ngModel)]="newCase.assignedTo"
+            placeholder="Team member name">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Due Date</label>
+          <div class="position-relative">
+            <input matInput [matDatepicker]="picker" class="form-control rounded-3" [(ngModel)]="newCase.due"
+              placeholder="dd-mm-yyyy">
+            <mat-datepicker-toggle matSuffix [for]="picker"
+              class="position-absolute end-0 top-0"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+        </div>
+
+        <div class="col-12 mt-3">
+          <label class="form-label caption-bold text-dark">Description</label>
+          <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newCase.description"
+            placeholder="Brief case description..."></textarea>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+        <button mat-button class="rounded-3 px-4" (click)="toggleNewCaseModal()">Cancel</button>
+        <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createCase()">Create</button>
+      </div>
     </div>
   </div>
 </div>
-
-<!-- Add MatMenuModule to component imports if needed -->

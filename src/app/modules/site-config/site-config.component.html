@@ -1,0 +1,161 @@
+<div class="settings-screen p-4">
+  <!-- Header -->
+  <div class="mb-4">
+    <h1 class="h2-bold text-dark mb-1">Settings</h1>
+    <p class="body-reg text-muted mb-0">Configure your workspace, branding, and preferences</p>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabs-nav d-flex gap-2 mb-4 p-1 bg-light rounded-3 shadow-sm fit-content">
+    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'general'"
+      (click)="activeTab = 'general'">
+      <mat-icon class="me-2">business</mat-icon> General
+    </button>
+    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'branding'"
+      (click)="activeTab = 'branding'">
+      <mat-icon class="me-2">palette</mat-icon> Branding
+    </button>
+    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'templates'"
+      (click)="activeTab = 'templates'">
+      <mat-icon class="me-2">language</mat-icon> Templates
+    </button>
+    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'team'"
+      (click)="activeTab = 'team'">
+      <mat-icon class="me-2">groups</mat-icon> Team
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <mat-card class="border-0 shadow-sm p-4 rounded-4 main-settings-card">
+
+    <!-- General Tab -->
+    <div *ngIf="activeTab === 'general'" class="tab-pane">
+      <h3 class="title1-bold mb-4">Organization Details</h3>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <label class="form-label body-bold mb-2">Organization Name</label>
+          <input type="text" class="form-control" [(ngModel)]="organizationDetails.name"
+            placeholder="Sterling Legal Partners">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label body-bold mb-2">Industry</label>
+          <select class="form-select" [(ngModel)]="organizationDetails.industry">
+            <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label body-bold mb-2">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="organizationDetails.email"
+            placeholder="info@sterlinglegal.com">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label body-bold mb-2">Phone</label>
+          <input type="text" class="form-control" [(ngModel)]="organizationDetails.phone"
+            placeholder="+1 (555) 234-5678">
+        </div>
+        <div class="col-12">
+          <label class="form-label body-bold mb-2">Tagline</label>
+          <input type="text" class="form-control" [(ngModel)]="organizationDetails.tagline"
+            placeholder="Excellence in Legal Services">
+        </div>
+        <div class="col-12">
+          <label class="form-label body-bold mb-2">Address</label>
+          <textarea class="form-control" [(ngModel)]="organizationDetails.address" rows="3"
+            placeholder="500 Market Street..."></textarea>
+        </div>
+      </div>
+      <div class="mt-5">
+        <button mat-flat-button color="primary" class="rounded-2 px-4 py-2" (click)="saveGeneral()">Save
+          Changes</button>
+      </div>
+    </div>
+
+    <!-- Branding Tab -->
+    <div *ngIf="activeTab === 'branding'" class="tab-pane">
+      <h3 class="title1-bold mb-4">White Label Branding</h3>
+      <div class="row g-4">
+        <div class="col-md-5">
+          <label class="form-label body-bold mb-2">Logo</label>
+          <div
+            class="logo-upload-box border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center p-5 clickable">
+            <mat-icon class="text-muted mb-2" style="font-size: 32px; width: 32px; height: 32px">upload</mat-icon>
+            <span class="body-med text-primary">Upload Logo</span>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="mb-3">
+            <label class="form-label body-bold mb-2">Custom Domain</label>
+            <input type="text" class="form-control" [(ngModel)]="branding.domain" placeholder="www.yourfirm.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label body-bold mb-2">Primary Color</label>
+            <div class="d-flex gap-2">
+              <div class="color-preview rounded-1" [style.backgroundColor]="branding.primaryColor"></div>
+              <input type="text" class="form-control" [(ngModel)]="branding.primaryColor" placeholder="#6366f1">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label body-bold mb-2">Secondary Color</label>
+            <div class="d-flex gap-2">
+              <div class="color-preview rounded-1" [style.backgroundColor]="branding.secondaryColor"></div>
+              <input type="text" class="form-control" [(ngModel)]="branding.secondaryColor" placeholder="#8b5cf6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tiny Preview Area -->
+      <div class="mt-4 p-4 bg-light rounded-3">
+        <div class="caption-bold text-muted text-uppercase mb-3">Preview</div>
+        <div class="d-flex align-items-center gap-3">
+          <span class="body-bold text-primary" [style.color]="branding.primaryColor">Sterling Legal Partners</span>
+          <div class="d-flex gap-2">
+            <div class="rounded-circle" style="width: 20px; height: 20px;"
+              [style.backgroundColor]="branding.primaryColor"></div>
+            <div class="rounded-circle" style="width: 20px; height: 20px;"
+              [style.backgroundColor]="branding.secondaryColor"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <button mat-flat-button color="primary" class="rounded-2 px-4 py-2" (click)="saveBranding()">Save
+          Branding</button>
+      </div>
+    </div>
+
+    <!-- Templates Tab -->
+    <div *ngIf="activeTab === 'templates'" class="tab-pane">
+      <h3 class="title1-bold mb-2">Industry Templates</h3>
+      <p class="body-reg text-muted mb-4">Choose a template to pre-configure your modules, workflows, and settings</p>
+
+      <div class="row g-4">
+        <div class="col-md-4" *ngFor="let template of templates">
+          <div class="template-card p-4 border rounded-4 shadow-sm h-100 clickable" [class.active]="template.applied"
+            (click)="applyTemplate(template)">
+            <h4 class="title2-bold mb-2">{{ template.title }}</h4>
+            <p class="caption-reg text-muted mb-3">{{ template.description }}</p>
+            <div *ngIf="template.applied" class="caption-bold text-primary d-flex align-items-center">
+              <mat-icon class="me-1" style="font-size: 14px; width: 14px; height: 14px">check</mat-icon> Applied
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Tab -->
+    <div *ngIf="activeTab === 'team'" class="tab-pane">
+      <h3 class="title1-bold mb-2">Team & Roles</h3>
+      <p class="body-reg text-muted mb-4">Manage team members and their access levels</p>
+
+      <div class="d-flex flex-column gap-3">
+        <div *ngFor="let role of roles"
+          class="role-item p-3 bg-light rounded-3 d-flex flex-column gap-1 border border-white">
+          <div class="body-bold text-dark">{{ role.name }}</div>
+          <div class="caption-reg text-muted">{{ role.description }}</div>
+        </div>
+      </div>
+    </div>
+
+  </mat-card>
+</div>

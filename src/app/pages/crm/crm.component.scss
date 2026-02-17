@@ -1,6 +1,6 @@
 @import '../../../styles/palette';
 
-.invoice-screen {
+.crm-screen {
     background-color: #fcfdfe;
     min-height: 100vh;
 }
@@ -69,10 +69,6 @@
     }
 }
 
-.text-indigo {
-    color: #6366f1;
-}
-
 .status-badge {
     padding: 4px 12px;
     border-radius: 6px;
@@ -80,24 +76,22 @@
     font-weight: 600;
     text-transform: capitalize;
 
-    &.draft {
-        background-color: #f1f5f9;
-        color: #475569;
-    }
-
-    &.sent {
-        background-color: #eef2ff;
-        color: #6366f1;
-    }
-
-    &.paid {
+    &.active {
         background-color: #f0fdf4;
         color: #15803d;
+        border: 1px solid #dcfce7;
     }
 
-    &.overdue {
-        background-color: #fef2f2;
-        color: #b91c1c;
+    &.prospect {
+        background-color: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #dbeafe;
+    }
+
+    &.inactive {
+        background-color: #f8fafc;
+        color: #475569;
+        border: 1px solid #e2e8f0;
     }
 }
 
@@ -117,7 +111,7 @@
 }
 
 .modal-container {
-    width: 700px;
+    width: 650px;
     max-width: 95vw;
     max-height: 90vh;
     overflow-y: auto;
@@ -134,11 +128,6 @@
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-.line-items-header {
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 8px;
 }
 
 .form-control,

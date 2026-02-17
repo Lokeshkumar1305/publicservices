@@ -1,0 +1,142 @@
+<div class="crm-screen p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2-bold text-dark mb-1">Clients</h1>
+            <p class="body-reg text-muted mb-0">{{ filteredClients.length }} of {{ allClients.length }} clients</p>
+        </div>
+        <div class="d-flex gap-3 align-items-center">
+            <div class="search-box position-relative">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input type="text" placeholder="Search clients..."
+                    class="form-control ps-5 rounded-3 border-light shadow-sm">
+            </div>
+
+            <!-- Status Filters -->
+            <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'all'"
+                    (click)="filterClients('all')">All</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'active'"
+                    (click)="filterClients('active')">Active</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'prospect'"
+                    (click)="filterClients('prospect')">Prospects</button>
+                <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'inactive'"
+                    (click)="filterClients('inactive')">Inactive</button>
+            </div>
+
+            <button mat-stroked-button class="rounded-3 px-3 shadow-sm border-light">
+                <mat-icon class="me-1">download</mat-icon> Export
+            </button>
+            <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleAddModal()">
+                <mat-icon class="me-1">add</mat-icon> Add Client
+            </button>
+        </div>
+    </div>
+
+    <!-- Clients Table -->
+    <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4" style="width: 50px;">
+                            <mat-checkbox color="primary"></mat-checkbox>
+                        </th>
+                        <th class="caption-bold text-muted text-uppercase">Name</th>
+                        <th class="caption-bold text-muted text-uppercase">Email</th>
+                        <th class="caption-bold text-muted text-uppercase">Phone</th>
+                        <th class="caption-bold text-muted text-uppercase">Company</th>
+                        <th class="caption-bold text-muted text-uppercase text-center">Status</th>
+                        <th class="caption-bold text-muted text-uppercase">Source</th>
+                        <th class="caption-bold text-muted text-uppercase">Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of filteredClients" class="align-middle">
+                        <td class="ps-4">
+                            <mat-checkbox color="primary" [(ngModel)]="c.selected"></mat-checkbox>
+                        </td>
+                        <td class="body-bold text-dark">{{ c.name }}</td>
+                        <td class="body-reg text-muted">{{ c.email }}</td>
+                        <td class="body-reg text-muted">{{ c.phone }}</td>
+                        <td class="body-reg text-muted">{{ c.company }}</td>
+                        <td class="text-center">
+                            <span class="badge status-badge" [ngClass]="c.status">
+                                {{ c.status }}
+                            </span>
+                        </td>
+                        <td class="body-reg text-muted">{{ c.source }}</td>
+                        <td class="caption-reg text-muted">{{ c.added }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card>
+
+    <!-- Add Client Modal -->
+    <div class="modal-overlay" *ngIf="showAddModal" (click)="toggleAddModal()">
+        <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="title1-bold m-0">New Client</h2>
+                <button mat-icon-button (click)="toggleAddModal()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Name *</label>
+                    <input type="text" class="form-control rounded-3" [(ngModel)]="newClient.name"
+                        placeholder="Enter name">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Email *</label>
+                    <input type="email" class="form-control rounded-3" [(ngModel)]="newClient.email"
+                        placeholder="Enter email">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Phone</label>
+                    <input type="text" class="form-control rounded-3" [(ngModel)]="newClient.phone"
+                        placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Company</label>
+                    <input type="text" class="form-control rounded-3" [(ngModel)]="newClient.company"
+                        placeholder="Company name">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Type</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newClient.type">
+                        <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Status</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newClient.status">
+                        <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label caption-bold text-dark">Source</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newClient.source">
+                        <option *ngFor="let src of sources" [value]="src">{{ src }}</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <label class="form-label caption-bold text-dark">Notes</label>
+                    <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newClient.notes"
+                        placeholder="Any details..."></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                <button mat-button class="rounded-3 px-4" (click)="toggleAddModal()">Cancel</button>
+                <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createClient()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>

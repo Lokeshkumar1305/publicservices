@@ -1,103 +1,175 @@
-<div class="billing-module p-2">
+<div class="invoice-screen p-4">
+  <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h1 class="h2-bold text-dark mb-1">Billing & Revenue Engine</h1>
-      <p class="body-reg text-muted">MBS Integration: Automated Rating, Proration & Rev-Rec</p>
+      <h1 class="h2-bold text-dark mb-1">Invoices</h1>
+      <p class="body-reg text-muted mb-0">{{ filteredInvoices.length }} of {{ allInvoices.length }} invoices</p>
     </div>
-    <div class="d-flex gap-2">
-      <button class="ps-btn ps-btn-outline">
-        <mat-icon class="me-2">settings_suggest</mat-icon>
-        RATING RULES
+    <div class="d-flex gap-3 align-items-center">
+      <div class="search-box position-relative">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Search invoices..." class="form-control ps-5 rounded-3 border-light shadow-sm">
+      </div>
+
+      <!-- Status Filters -->
+      <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'all'"
+          (click)="filterInvoices('all')">All</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'draft'"
+          (click)="filterInvoices('draft')">Draft</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'sent'"
+          (click)="filterInvoices('sent')">Sent</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'paid'"
+          (click)="filterInvoices('paid')">Paid</button>
+        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'overdue'"
+          (click)="filterInvoices('overdue')">Overdue</button>
+      </div>
+
+      <button mat-stroked-button class="rounded-3 px-3 shadow-sm border-light">
+        <mat-icon class="me-1">download</mat-icon> Export
       </button>
-      <button class="ps-btn ps-btn-primary">
-        <mat-icon class="me-2">receipt</mat-icon>
-        RUN BILLING CYCLE
+      <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleNewInvoiceModal()">
+        <mat-icon class="me-1">add</mat-icon> New Invoice
       </button>
     </div>
   </div>
 
-  <div class="row g-4">
-    <div class="col-md-8">
-      <mat-card class="border-0 shadow-sm p-4">
-        <h3 class="h4-bold mb-3">Pending Billable Items</h3>
-        <div class="table-responsive">
-          <table class="table align-middle">
-            <thead class="bg-light">
-              <tr class="caption-bold text-muted text-uppercase">
-                <th>Reference</th>
-                <th>Client</th>
-                <th>Service / Description</th>
-                <th>Amount</th>
-                <th>State</th>
-                <th class="text-end">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of billableItems">
-                <td class="caption-bold text-muted">{{ item.id }}</td>
-                <td class="body-med">{{ item.client }}</td>
-                <td>
-                  <span class="body-reg">{{ item.description }}</span
-                  ><br />
-                  <span class="badge bg-light text-dark border caption-reg">{{ item.type }}</span>
-                </td>
-                <td class="body-bold text-dark">${{ item.amount | number: '1.2-2' }}</td>
-                <td>
-                  <span
-                    class="badge rounded-pill"
-                    [ngClass]="
-                      item.status === 'Pending'
-                        ? 'bg-warning-subtle text-warning'
-                        : 'bg-success-subtle text-success'
-                    "
-                  >
-                    {{ item.status }}
-                  </span>
-                </td>
-                <td class="text-end">
-                  <button
-                    class="ps-btn ps-btn-primary py-1 px-3 caption-bold"
-                    *ngIf="item.status === 'Pending'"
-                    (click)="generateInvoice(item)"
-                  >
-                    INVOICE
-                  </button>
-                  <mat-icon class="text-success" *ngIf="item.status === 'Invoiced'"
-                    >cloud_done</mat-icon
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </mat-card>
+  <!-- Invoices Table -->
+  <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th class="ps-4" style="width: 50px;">
+              <mat-checkbox color="primary"></mat-checkbox>
+            </th>
+            <th class="caption-bold text-muted text-uppercase">Invoice #</th>
+            <th class="caption-bold text-muted text-uppercase">Client</th>
+            <th class="caption-bold text-muted text-uppercase">Amount</th>
+            <th class="caption-bold text-muted text-uppercase text-center">Status</th>
+            <th class="caption-bold text-muted text-uppercase">Due</th>
+            <th class="caption-bold text-muted text-uppercase">Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inv of filteredInvoices" class="align-middle">
+            <td class="ps-4">
+              <mat-checkbox color="primary" [(ngModel)]="inv.selected"></mat-checkbox>
+            </td>
+            <td class="body-bold text-indigo">{{ inv.id }}</td>
+            <td class="body-reg text-muted">{{ inv.client }}</td>
+            <td class="body-bold text-dark">{{ inv.amount }}</td>
+            <td class="text-center">
+              <span class="badge status-badge" [ngClass]="inv.status">
+                {{ inv.status }}
+              </span>
+            </td>
+            <td class="body-reg text-muted">{{ inv.due }}</td>
+            <td class="caption-reg text-muted">{{ inv.created }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </mat-card>
 
-    <div class="col-md-4">
-      <!-- Financial Summary Engine -->
-      <mat-card class="border-0 shadow-sm p-4 h-100 bg-light">
-        <h3 class="h4-bold mb-4">Financial Engine Insight</h3>
+  <!-- New Invoice Modal -->
+  <div class="modal-overlay" *ngIf="showNewInvoiceModal" (click)="toggleNewInvoiceModal()">
+    <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="title1-bold m-0">New Invoice</h2>
+        <button mat-icon-button (click)="toggleNewInvoiceModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
 
-        <div class="mb-4">
-          <div class="caption-bold text-muted text-uppercase mb-2">Revenue Recognition</div>
-          <div
-            class="d-flex justify-content-between align-items-center p-2 bg-white rounded-3 mb-2 border"
-          >
-            <span class="body-reg">Accrued Rev</span>
-            <span class="body-bold text-success">$42,500.00</span>
-          </div>
-          <p class="caption-reg text-muted">
-            Invoices generated trigger immediate accrual in Toucan GL.
-          </p>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label caption-bold text-dark">Invoice #</label>
+          <input type="text" class="form-control rounded-3" [(ngModel)]="newInvoice.id">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label caption-bold text-dark">Client</label>
+          <select class="form-select rounded-3" [(ngModel)]="newInvoice.client">
+            <option value="" disabled selected>Select client</option>
+            <option *ngFor="let c of clients" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label caption-bold text-dark">Status</label>
+          <select class="form-select rounded-3" [(ngModel)]="newInvoice.status">
+            <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+          </select>
         </div>
 
-        <div>
-          <div class="caption-bold text-muted text-uppercase mb-2">Proration Engine</div>
-          <div class="p-3 border-start border-4 border-primary-active bg-white rounded-end-3">
-            <span class="body-med text-dark">Mid-cycle adjustment activefor 12 tenants.</span>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Due Date</label>
+          <div class="position-relative">
+            <input matInput [matDatepicker]="picker" class="form-control rounded-3" [(ngModel)]="newInvoice.dueDate"
+              placeholder="dd-mm-yyyy">
+            <mat-datepicker-toggle matSuffix [for]="picker"
+              class="position-absolute end-0 top-0"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
           </div>
         </div>
-      </mat-card>
+        <div class="col-md-6">
+          <label class="form-label caption-bold text-dark">Tax Amount</label>
+          <input type="number" class="form-control rounded-3" [(ngModel)]="newInvoice.taxAmount" placeholder="0.00">
+        </div>
+
+        <!-- Line Items -->
+        <div class="col-12 mt-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label caption-bold text-dark m-0">Line Items</label>
+            <button mat-button class="text-primary caption-bold" (click)="addLineItem()">+ Add Item</button>
+          </div>
+          <div class="line-items-header row g-2 mb-2 px-2">
+            <div class="col-6 caption-med text-muted">Description</div>
+            <div class="col-2 caption-med text-muted">Qty</div>
+            <div class="col-2 caption-med text-muted">Price</div>
+            <div class="col-2 caption-med text-muted">Total</div>
+          </div>
+          <div class="line-items-list d-flex flex-column gap-2 mb-3">
+            <div class="row g-2 align-items-center" *ngFor="let item of newInvoice.lineItems; let i = index">
+              <div class="col-6">
+                <input type="text" class="form-control rounded-2 border-light" [(ngModel)]="item.description"
+                  placeholder="Description">
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control rounded-2 border-light" [(ngModel)]="item.qty"
+                  (change)="updateLineTotal(item)">
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control rounded-2 border-light" [(ngModel)]="item.price"
+                  (change)="updateLineTotal(item)" placeholder="0.00">
+              </div>
+              <div class="col-2 d-flex align-items-center gap-2">
+                <span class="body-med text-dark">${{ item.total }}</span>
+                <button mat-icon-button color="warn" class="btn-sm" (click)="removeLineItem(i)">
+                  <mat-icon style="font-size: 18px; width: 18px; height: 18px">delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column align-items-end gap-1 px-4">
+            <div class="caption-med text-muted">Subtotal: <span class="body-bold text-dark">${{ getSubtotal() }}</span>
+            </div>
+            <div class="caption-med text-muted">Tax: <span class="body-bold text-dark">${{ newInvoice.taxAmount || 0
+                }}</span></div>
+            <div class="title2-bold text-indigo mt-1">Total: ${{ getTotal() }}</div>
+          </div>
+        </div>
+
+        <div class="col-12 mt-3">
+          <label class="form-label caption-bold text-dark">Notes</label>
+          <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newInvoice.notes"
+            placeholder="Add any notes here..."></textarea>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+        <button mat-button class="rounded-3 px-4" (click)="toggleNewInvoiceModal()">Cancel</button>
+        <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createInvoice()">Create</button>
+      </div>
     </div>
   </div>
 </div>

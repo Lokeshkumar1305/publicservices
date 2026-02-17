@@ -1,58 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
     MatCardModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatRadioModule,
+    MatButtonModule,
     MatIconModule,
-    FormsModule,
+    MatBadgeModule
   ],
   templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
-  stats = [
-    { label: 'Revenue (MTD)', value: '$ 14,250', icon: 'trending_up', trend: '+12%' },
-    { label: 'Active Matters', value: '24 Open Cases', icon: 'gavel', trend: 'Stable' },
-    { label: 'Client Retention', value: '98.5%', icon: 'group_add', trend: '+2%' },
-    { label: 'Billable Hours', value: '1,240h', icon: 'timer', trend: '+5%' },
+export class DashboardComponent implements OnInit {
+  metrics = [
+    { label: 'Total Clients', value: '7', icon: 'groups', trend: '12% from last month', trendUp: true, color: 'blue' },
+    { label: 'Active Cases', value: '5', icon: 'business_center', color: 'orange' },
+    { label: 'Bookings', value: '4', icon: 'calendar_today', subtext: 'Upcoming', color: 'purple' },
+    { label: 'Revenue', value: '$3,526.25', icon: 'attach_money', trend: '8% from last month', trendUp: true, color: 'green' },
+    { label: 'Pending', value: '2', icon: 'description', subtext: 'Invoices', color: 'red' },
+    { label: 'Total Cases', value: '7', icon: 'trending_up', color: 'cyan' },
   ];
 
-  modules = [
-    { name: 'Case Management', status: 'Optimal', health: 98, icon: 'assignment_turned_in' },
-    { name: 'Financial Billing', status: 'Optimal', health: 100, icon: 'payments' },
-    { name: 'Document Vault', status: 'Optimal', health: 95, icon: 'lock' },
-    { name: 'Client CRM', status: 'Optimal', health: 92, icon: 'contact_page' },
+  recentCases = [
+    { title: 'TechCorp Merger Agreement', subtitle: 'Sarah Mitchell · Feb 16, 2026', status: 'in progress' },
+    { title: 'Greenfield IP Dispute', subtitle: 'James Rodriguez · Feb 16, 2026', status: 'open' },
+    { title: 'Chen Estate Planning', subtitle: 'Emily Chen · Feb 16, 2026', status: 'pending review' },
+    { title: 'Blue Edge Employment Contract', subtitle: 'Michael Thompson · Feb 16, 2026', status: 'open' },
+    { title: 'Sharma Immigration Case', subtitle: 'Priya Sharma · Feb 16, 2026', status: 'in progress' },
   ];
 
-  recentActivity = [
-    { text: 'Case #102 Updated', time: '10 mins ago' },
-    { text: 'New Client: J. Doe', time: '1 hr ago' },
-    { text: 'Invoice #99 Approved', time: '2 hrs ago' },
+  recentBookings = [
+    { client: 'Sarah Mitchell', subtitle: 'Sarah Mitchell · Feb 16, 2026', status: 'confirmed' },
+    { client: 'Michael Thompson', subtitle: 'Michael Thompson · Feb 16, 2026', status: 'pending' },
+    { client: 'Amanda Foster', subtitle: 'Amanda Foster · Feb 16, 2026', status: 'confirmed' },
   ];
 
-  pendingActions = [
-    { text: 'Sign Retainer (Doe vs State)', action: 'SIGN' },
-    { text: 'Approve Invoice #99', action: 'APPROVE' },
-    { text: 'Review Evidence Folder', action: 'REIVEW' },
+  recentInvoices = [
+    { client: 'Sarah Mitchell', subtitle: 'Sarah Mitchell · Feb 16, 2026', status: 'paid' },
+    { client: 'James Rodriguez', subtitle: 'James Rodriguez · Feb 16, 2026', status: 'paid' },
+    { client: 'Emily Chen', subtitle: 'Emily Chen · Feb 16, 2026', status: 'sent' },
   ];
+
+  constructor() { }
+
+  ngOnInit(): void { }
+
+  getStatusClass(status: string): string {
+    return status.replace(' ', '-').toLowerCase();
+  }
 }

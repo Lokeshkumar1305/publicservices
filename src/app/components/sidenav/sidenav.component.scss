@@ -1,9 +1,9 @@
 @import '../../../styles/palette';
 
 .sidenav {
-  background-color: $bg-sidebar;
+  background-color: #0d1421; // Deep dark blue background
   width: 280px;
-  color: white;
+  color: #8e98a8; // Muted gray-blue for text
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 
   .logo-section {
@@ -12,106 +12,127 @@
     }
   }
 
+  // Header for each menu group
   .group-header {
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    color: rgba(255, 255, 255, 0.3) !important;
-    font-weight: 600;
-    margin-top: 1.5rem;
-    padding-left: 16px;
+    .group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(142, 152, 168, 0.4);
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
 
-    .border-bottom {
-      border-color: rgba(255, 255, 255, 0.05) !important;
+    .group-line {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
     }
   }
 
+  .menu-items {
+    padding: 0 12px;
+  }
+
   .menu-item {
-    transition: all 0.2s ease-in-out;
-    color: rgba(255, 255, 255, 0.55);
-    padding: 12px 24px !important;
-    margin: 2px 0;
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #8e98a8;
+    position: relative;
     border-left: 3px solid transparent;
 
-    mat-icon {
+    .item-icon {
       font-size: 20px;
       width: 20px;
       height: 20px;
-      margin-right: 14px;
-      opacity: 0.75;
+      color: #8e98a8;
+      transition: color 0.2s ease;
     }
 
-    .body-med {
+    .item-name {
       font-size: 14px;
-      letter-spacing: 0.1px;
       font-weight: 500;
+      letter-spacing: 0.2px;
     }
 
     &:hover:not(.active) {
       background-color: rgba(255, 255, 255, 0.03);
-      color: white;
+      color: #ffffff;
 
-      mat-icon {
-        opacity: 1;
+      .item-icon {
+        color: #ffffff;
       }
     }
 
+    // Active state
     &.active {
-      background: linear-gradient(
-        90deg,
-        rgba(18, 179, 147, 0.16) 0%,
-        rgba(18, 179, 147, 0.04) 100%
-      );
-      color: #7ef1d7 !important; // Brighter mint teal for active text
-      border-left: 4px solid #12b393;
-      border-radius: 0 4px 4px 0;
+      background: linear-gradient(90deg,
+          rgba(16, 185, 129, 0.1) 0%, // Teal tint
+          rgba(16, 185, 129, 0) 100%);
+      color: #10b981 !important; // Active Teal/Emerald
+      border-left-color: #10b981;
+      border-radius: 0 8px 8px 0;
+      margin-left: -12px; // Pull to edge for active border
+      padding-left: 28px; // Compensate for pull
 
-      mat-icon {
-        color: #7ef1d7 !important; // Match text color
-        opacity: 1;
+      .item-icon {
+        color: #10b981 !important;
       }
 
       .active-dot {
-        display: block; // Show only when active
+        opacity: 1;
+        transform: scale(1);
       }
     }
   }
 
   .active-dot {
-    display: none; // Hidden by default
-    width: 8px;
-    height: 8px;
-    background-color: #00ffc3; // Vibrant bright green/teal dot
+    width: 6px;
+    height: 6px;
+    background-color: #10b981;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(0, 255, 195, 0.6);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
   }
 
-  .user-section {
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    margin: 16px;
-    padding: 12px !important;
-    border-radius: 12px;
+  // User Profile Card at Bottom
+  .user-profile-wrapper {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .user-profile {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     transition: background 0.2s ease;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.07);
+      background-color: rgba(255, 255, 255, 0.06);
     }
 
-    .user-avatar {
+    .user-name {
+      color: #ffffff;
+      font-size: 13.5px;
+      margin-bottom: 2px;
+    }
+
+    .user-email {
+      color: rgba(142, 152, 168, 0.6);
+      font-size: 11px;
+    }
+
+    .avatar-container {
       img {
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(16, 185, 129, 0.2);
+        padding: 2px;
       }
     }
+  }
 
-    .body-bold {
-      font-size: 14px;
-      color: white;
-    }
-
-    .caption-reg {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.4);
-    }
+  .decoration-none {
+    text-decoration: none !important;
   }
 
   .clickable {
@@ -119,7 +140,7 @@
   }
 }
 
-// Custom internal scrollbar for sidenav
+// Scrollbar styling
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -129,6 +150,6 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 10px;
 }

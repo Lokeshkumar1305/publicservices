@@ -1,130 +1,117 @@
-<div class="enterprise-dashboard p-4">
-  <div class="mb-5 d-flex justify-content-between align-items-end">
-    <div>
-      <h1 class="h1-bold text-dark mb-1">Smith Legal Group</h1>
-      <p class="body-reg text-muted mb-0">Command Center & Operational Overview</p>
-    </div>
-    <div class="d-flex gap-2">
-      <button mat-stroked-button class="rounded-pill">GENERATE REPORT</button>
-      <button mat-flat-button color="primary" class="rounded-pill px-4">NEW CASE</button>
-    </div>
-  </div>
-
-  <!-- Executive Stats -->
-  <div class="row g-4 mb-5">
-    <div class="col-md-3" *ngFor="let stat of stats">
-      <mat-card class="border-0 shadow-sm p-4 h-100 position-relative overflow-hidden">
-        <div class="d-flex flex-column">
-          <div class="caption-bold text-muted text-uppercase mb-3">{{ stat.label }}</div>
-          <div class="h3-bold mb-1">{{ stat.value }}</div>
-          <div
-            class="caption-med"
-            [class.text-success]="stat.trend.startsWith('+')"
-            [class.text-muted]="!stat.trend.startsWith('+')"
-          >
-            {{ stat.trend }} vs. last month
+<div class="dashboard-container p-4">
+  <!-- Metrics Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-2" *ngFor="let metric of metrics">
+      <mat-card class="metric-card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+        <div class="p-3">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="caption-bold text-muted">{{ metric.label }}</span>
+            <div class="icon-box" [ngClass]="metric.color">
+              <mat-icon>{{ metric.icon }}</mat-icon>
+            </div>
           </div>
-        </div>
-        <div class="stat-icon-bg">
-          <mat-icon>{{ stat.icon }}</mat-icon>
+          <div class="h2-bold mb-1">{{ metric.value }}</div>
+          <div class="caption-reg d-flex align-items-center gap-1"
+            [ngClass]="metric.trendUp ? 'text-success' : 'text-muted'">
+            <mat-icon *ngIf="metric.trend" style="font-size: 14px; width: 14px; height: 14px;">trending_up</mat-icon>
+            {{ metric.trend || metric.subtext }}
+          </div>
         </div>
       </mat-card>
     </div>
   </div>
 
+  <!-- Main Grid: Chart and Recent Cases -->
+  <div class="row g-4 mb-4">
+    <!-- Revenue Chart -->
+    <div class="col-md-8">
+      <mat-card class="chart-card border-0 shadow-sm rounded-4 h-100 overflow-hidden p-4">
+        <h3 class="title2-bold text-dark mb-4">Revenue Overview</h3>
+        <div class="chart-container">
+          <!-- Replicating the line chart with SVG for premium look without heavy dependencies -->
+          <svg viewBox="0 0 800 300" class="revenue-chart">
+            <!-- Grid Lines -->
+            <line x1="0" y1="0" x2="800" y2="0" stroke="#f1f5f9" />
+            <line x1="0" y1="75" x2="800" y2="75" stroke="#f1f5f9" />
+            <line x1="0" y1="150" x2="800" y2="150" stroke="#f1f5f9" />
+            <line x1="0" y1="225" x2="800" y2="225" stroke="#f1f5f9" />
+            <line x1="0" y1="300" x2="800" y2="300" stroke="#e2e8f0" />
+
+            <!-- Labels Y-Axis -->
+            <text x="-10" y="5" class="chart-label" text-anchor="end">$3600</text>
+            <text x="-10" y="80" class="chart-label" text-anchor="end">$2700</text>
+            <text x="-10" y="155" class="chart-label" text-anchor="end">$1800</text>
+            <text x="-10" y="230" class="chart-label" text-anchor="end">$900</text>
+            <text x="-10" y="305" class="chart-label" text-anchor="end">$0</text>
+
+            <!-- Chart Line Path -->
+            <path d="M 0 300 L 100 300 L 200 300 L 300 300 L 400 300 L 500 300 L 600 280 Q 700 200 800 50" fill="none"
+              stroke="#6366f1" stroke-width="3" stroke-linecap="round" />
+
+            <!-- X-Axis Labels -->
+            <text x="0" y="330" class="chart-label" text-anchor="middle">Sep</text>
+            <text x="160" y="330" class="chart-label" text-anchor="middle">Oct</text>
+            <text x="320" y="330" class="chart-label" text-anchor="middle">Nov</text>
+            <text x="480" y="330" class="chart-label" text-anchor="middle">Dec</text>
+            <text x="640" y="330" class="chart-label" text-anchor="middle">Jan</text>
+            <text x="800" y="330" class="chart-label" text-anchor="middle">Feb</text>
+          </svg>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Recent Cases -->
+    <div class="col-md-4">
+      <mat-card class="border-0 shadow-sm rounded-4 h-100 overflow-hidden p-4">
+        <h3 class="title2-bold text-dark mb-4">Recent Cases</h3>
+        <div class="list-container d-flex flex-column gap-3">
+          <div *ngFor="let c of recentCases"
+            class="d-flex justify-content-between align-items-center p-2 rounded-3 hover-bg transition">
+            <div>
+              <div class="body-bold text-dark mb-1">{{ c.title }}</div>
+              <div class="caption-reg text-muted">{{ c.subtitle }}</div>
+            </div>
+            <span class="badge status-badge" [ngClass]="getStatusClass(c.status)">{{ c.status }}</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Bottom Row: Bookings and Invoices -->
   <div class="row g-4">
-    <!-- Active Modules -->
-    <div class="col-lg-7">
-      <mat-card class="border-0 shadow-sm p-4 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2 class="h4-bold mb-0">Provisioned Modules</h2>
-          <span class="badge bg-primary-subtle text-primary-active px-3 py-2 rounded-pill"
-            >All Systems Nominal</span
-          >
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle border-0">
-            <thead>
-              <tr class="caption-bold text-muted text-uppercase">
-                <th class="border-0 px-0">Module</th>
-                <th class="border-0">Status</th>
-                <th class="border-0 text-end">Uptime</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let mod of modules">
-                <td class="px-0">
-                  <div class="d-flex align-items-center">
-                    <div
-                      class="icon-square me-3 bg-light rounded-3 d-flex align-items-center justify-content-center"
-                    >
-                      <mat-icon style="font-size: 20px; width: 22px; height: 22px">{{
-                        mod.icon
-                      }}</mat-icon>
-                    </div>
-                    <span class="body-bold">{{ mod.name }}</span>
-                  </div>
-                </td>
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-                    <div
-                      class="status-dot rounded-circle"
-                      [class.bg-success]="mod.health > 50"
-                      [class.bg-danger]="mod.health <= 50"
-                    ></div>
-                    <span class="caption-med">{{ mod.status }}</span>
-                  </div>
-                </td>
-                <td class="text-end fw-bold">{{ mod.health }}%</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- Recent Bookings -->
+    <div class="col-md-6">
+      <mat-card class="border-0 shadow-sm rounded-4 h-100 overflow-hidden p-4">
+        <h3 class="title2-bold text-dark mb-4">Recent Bookings</h3>
+        <div class="list-container d-flex flex-column gap-3">
+          <div *ngFor="let b of recentBookings"
+            class="d-flex justify-content-between align-items-center p-2 rounded-3 hover-bg transition">
+            <div>
+              <div class="body-bold text-dark mb-1">{{ b.client }}</div>
+              <div class="caption-reg text-muted">{{ b.subtitle }}</div>
+            </div>
+            <span class="badge status-badge" [ngClass]="getStatusClass(b.status)">{{ b.status }}</span>
+          </div>
         </div>
       </mat-card>
     </div>
 
-    <!-- Activity & Actions -->
-    <div class="col-lg-5">
-      <div class="d-flex flex-column gap-4 h-100">
-        <!-- Recent Activity -->
-        <mat-card class="border-0 shadow-sm p-4">
-          <h3 class="h4-bold mb-4">Recent Activity</h3>
-          <div class="activity-feed">
-            <div
-              *ngFor="let act of recentActivity"
-              class="activity-item d-flex gap-3 mb-4 last-child-mb-0"
-            >
-              <div class="activity-dot-line">
-                <div class="activity-dot bg-primary-active"></div>
-              </div>
-              <div>
-                <div class="body-med text-dark">{{ act.text }}</div>
-                <div class="caption-reg text-muted">{{ act.time }}</div>
-              </div>
+    <!-- Recent Invoices -->
+    <div class="col-md-6">
+      <mat-card class="border-0 shadow-sm rounded-4 h-100 overflow-hidden p-4">
+        <h3 class="title2-bold text-dark mb-4">Recent Invoices</h3>
+        <div class="list-container d-flex flex-column gap-3">
+          <div *ngFor="let i of recentInvoices"
+            class="d-flex justify-content-between align-items-center p-2 rounded-3 hover-bg transition">
+            <div>
+              <div class="body-bold text-dark mb-1">{{ i.client }}</div>
+              <div class="caption-reg text-muted">{{ i.subtitle }}</div>
             </div>
+            <span class="badge status-badge" [ngClass]="getStatusClass(i.status)">{{ i.status }}</span>
           </div>
-        </mat-card>
-
-        <!-- Pending Actions -->
-        <mat-card class="border-0 shadow-sm p-4 bg-primary-900 text-white">
-          <h3 class="h4-bold mb-4 text-white">Pending Actions</h3>
-          <div class="action-list">
-            <div
-              *ngFor="let pen of pendingActions"
-              class="action-item d-flex justify-content-between align-items-center p-3 rounded-3 bg-white bg-opacity-10 mb-2 last-child-mb-0"
-            >
-              <span class="body-med">{{ pen.text }}</span>
-              <button
-                mat-button
-                class="text-white caption-bold border border-white border-opacity-25"
-              >
-                {{ pen.action }}
-              </button>
-            </div>
-          </div>
-        </mat-card>
-      </div>
+        </div>
+      </mat-card>
     </div>
   </div>
 </div>

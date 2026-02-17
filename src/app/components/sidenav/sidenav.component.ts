@@ -14,32 +14,41 @@ export class SidenavComponent {
   menuGroups = [
     {
       name: 'Overview',
-      items: [{ name: 'Dashboard', icon: 'grid_view', route: '/dashboard', hasDot: false }],
-    },
-    {
-      name: 'Modular OS',
       items: [
-        { name: 'Inventory', icon: 'inventory_2', route: '/inventory', hasDot: false },
-        { name: 'Cases', icon: 'gavel', route: '/cases', hasDot: false },
-        { name: 'Billing', icon: 'receipt_long', route: '/billing', hasDot: false },
-        {
-          name: 'Reconciliation',
-          icon: 'account_balance_wallet',
-          route: '/reconciliation',
-          hasDot: false,
-        },
+        { name: 'Dashboard', icon: 'grid_view', route: '/dashboard' },
       ],
     },
     {
-      name: 'Infrastructure',
-      items: [{ name: 'Provisioning', icon: 'layers', route: '/onboarding-kyb', hasDot: false }],
+      name: 'Operations',
+      items: [
+        { name: 'CRM', icon: 'group', route: '/crm' },
+        { name: 'Cases', icon: 'business_center', route: '/cases' },
+        { name: 'Services', icon: 'widgets', route: '/services' },
+        { name: 'Bookings', icon: 'event', route: '/bookings' },
+      ],
+    },
+    {
+      name: 'Finance & Docs',
+      items: [
+        { name: 'Invoices', icon: 'description', route: '/invoices' },
+        { name: 'Onboarding', icon: 'person_add', route: '/onboarding-kyb' },
+        { name: 'Documents', icon: 'folder', route: '/documents' },
+      ],
+    },
+    {
+      name: 'Insights & System',
+      items: [
+        { name: 'Reports', icon: 'bar_chart', route: '/reports' },
+        { name: 'Modules', icon: 'dashboard_customize', route: '/modules' },
+        { name: 'Settings', icon: 'settings', route: '/settings' },
+      ],
     },
   ];
 
   user = {
-    name: 'Suman Dhumale',
-    email: 'suman@toucanus.com',
-    avatar: 'assets/images/user-avatar.jpg',
+    name: 'Lokesh Kumar',
+    email: 'lokesh@toucanus.com',
+    avatar: 'https://i.pravatar.cc/150?u=suman',
     role: 'superadmin',
   };
 }

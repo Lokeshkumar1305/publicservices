@@ -1,12 +1,12 @@
 @import '../../../styles/palette';
 
-.invoice-screen {
+.documents-screen {
     background-color: #fcfdfe;
     min-height: 100vh;
 }
 
 .search-box {
-    width: 250px;
+    width: 300px;
 
     .search-icon {
         position: absolute;
@@ -14,38 +14,19 @@
         top: 50%;
         transform: translateY(-50%);
         color: #94a3b8;
-        font-size: 18px;
-        height: 18px;
-        width: 18px;
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
     input {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0 !important;
-        font-size: 13px;
+        font-size: 14px;
 
         &:focus {
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
             border-color: #6366f1 !important;
-        }
-    }
-}
-
-.filter-tabs {
-    border: 1px solid #e2e8f0;
-
-    .filter-btn {
-        font-size: 12px;
-        font-weight: 600;
-        color: #64748b;
-        min-width: 60px;
-        height: 32px;
-        line-height: 32px;
-
-        &.active {
-            background-color: #ffffff !important;
-            color: #1e293b;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
     }
 }
@@ -55,13 +36,11 @@
         background-color: #fcfdfe;
         padding: 16px 12px;
         border-bottom: 1px solid #f1f5f9;
-        font-size: 11px;
     }
 
     tbody td {
         padding: 16px 12px;
         border-bottom: 1px solid #f8fafc;
-        font-size: 13px;
     }
 
     tbody tr:hover {
@@ -69,14 +48,10 @@
     }
 }
 
-.text-indigo {
-    color: #6366f1;
-}
-
 .status-badge {
-    padding: 4px 12px;
+    padding: 6px 14px;
     border-radius: 6px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: capitalize;
 
@@ -85,19 +60,19 @@
         color: #475569;
     }
 
-    &.sent {
-        background-color: #eef2ff;
-        color: #6366f1;
+    &.pending-review {
+        background-color: #fdf4ff;
+        color: #a21caf;
     }
 
-    &.paid {
+    &.approved {
         background-color: #f0fdf4;
         color: #15803d;
     }
 
-    &.overdue {
-        background-color: #fef2f2;
-        color: #b91c1c;
+    &.signed {
+        background-color: #eff6ff;
+        color: #1d4ed8;
     }
 }
 
@@ -117,8 +92,8 @@
 }
 
 .modal-container {
-    width: 700px;
-    max-width: 95vw;
+    width: 600px;
+    max-width: 90vw;
     max-height: 90vh;
     overflow-y: auto;
     animation: modal-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -136,19 +111,15 @@
     }
 }
 
-.line-items-header {
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 8px;
-}
+.upload-dropzone {
+    background-color: #f8fafc;
+    border: 2px dashed #e2e8f0 !important;
+    cursor: pointer;
+    transition: all 0.2s;
 
-.form-control,
-.form-select {
-    border: 1px solid #e2e8f0 !important;
-    font-size: 13px;
-
-    &:focus {
+    &:hover {
         border-color: #6366f1 !important;
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+        background-color: #f1f5f9;
     }
 }
 
