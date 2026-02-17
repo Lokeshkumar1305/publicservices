@@ -12,6 +12,8 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { DocumentsComponent } from './pages/documents/documents.component';
 import { BookingsComponent } from './pages/bookings/bookings.component';
 import { CrmComponent } from './pages/crm/crm.component';
+import { CustomerPortalComponent } from './pages/customer-portal/customer-portal.component';
+
 
 
 export const routes: Routes = [
@@ -30,4 +32,6 @@ export const routes: Routes = [
   { path: 'bookings', component: BookingsComponent },
   { path: 'documents', component: DocumentsComponent },
   { path: 'modules', component: ModulesComponent },
+  { path: 'portal-preview', component: CustomerPortalComponent },
+
 ];

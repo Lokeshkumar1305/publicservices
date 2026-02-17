@@ -7,18 +7,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
 
-interface OnboardingRequest {
-  firmName: string;
-  industry: string;
-  email: string;
-  subdomain: string;
-  status: 'pending' | 'in-progress' | 'completed';
-  joined: string;
-  selected?: boolean;
+interface Module {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  selected: boolean;
 }
 
 @Component({
@@ -33,8 +31,8 @@ interface OnboardingRequest {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    MatStepperModule,
+    MatChipsModule,
     FormsModule
   ],
   templateUrl: './onboarding.component.html',
@@ -43,28 +41,36 @@ interface OnboardingRequest {
 export class OnboardingComponent implements OnInit {
   activeFilter: string = 'all';
 
-  allRequests: OnboardingRequest[] = [
-    { firmName: 'Innovate Labs', industry: 'Law Firm', email: 'contact@innovate.com', subdomain: 'innovate', status: 'completed', joined: 'Feb 10, 2026' },
-    { firmName: 'TechCorp Solutions', industry: 'Consulting Firm', email: 'admin@techcorp.io', subdomain: 'techcorp', status: 'in-progress', joined: 'Feb 12, 2026' },
-    { firmName: 'Greenfield Legal', industry: 'Law Firm', email: 'office@greenfield.com', subdomain: 'greenfield', status: 'pending', joined: 'Feb 15, 2026' },
-    { firmName: 'Nova Soft', industry: 'Agency', email: 'hello@novasoft.net', subdomain: 'novasoft', status: 'completed', joined: 'Feb 05, 2026' },
-    { firmName: 'Blue Ridge CA', industry: 'CA Firm', email: 'support@blueridge.ca', subdomain: 'blueridge', status: 'in-progress', joined: 'Feb 16, 2026' },
+  // Advanced Module Marketplace (Zoho-style)
+  availableModules: Module[] = [
+    { id: 'crm', name: 'CRM', icon: 'people', description: 'Lead & Contact Management', selected: true },
+    { id: 'cases', name: 'Cases', icon: 'business_center', description: 'Project & Workflow Tracking', selected: true },
+    { id: 'payments', name: 'Payments', icon: 'payments', description: 'Stripe & PayPal Integration', selected: false },
+    { id: 'recon', name: 'Auto Recon', icon: 'sync', description: 'Automated Account Reconciliation', selected: false },
+    { id: 'reports', name: 'BI Reports', icon: 'bar_chart', description: 'Advanced Analytics & Insights', selected: false },
+    { id: 'nms', name: 'NMS', icon: 'notifications', description: 'Notification Management system', selected: false },
+    { id: 'dms', name: 'DMS', icon: 'folder', description: 'Document Management System', selected: false },
+    { id: 'event', name: 'Events', icon: 'event', description: 'Booking & Event Management', selected: false },
   ];
 
-  filteredRequests: OnboardingRequest[] = [];
-  showNewOnboardingModal: boolean = false;
+  allRequests: any[] = [
+    { firmName: 'Innovate Labs', industry: 'Law Firm', email: 'contact@innovate.com', status: 'completed', modules: ['CRM', 'DMS'] },
+    { firmName: 'Greenfield Legal', industry: 'Media', email: 'office@greenfield.com', status: 'pending', modules: ['Events', 'Payments'] },
+  ];
 
-  newRequest = {
-    firmName: '',
+  filteredRequests: any[] = [];
+  showWizard: boolean = false;
+
+  newFirm = {
+    name: '',
     industry: 'Law Firm',
     email: '',
     subdomain: '',
-    status: 'pending',
-    notes: ''
+    primaryColor: '#6366f1',
+    logo: ''
   };
 
-  industries = ['Law Firm', 'Event Management', 'Consulting Firm', 'Carpenter / Contractor', 'CA Firm', 'Agency'];
-  statuses = ['pending', 'in-progress', 'completed'];
+  industries = ['Law Firm', 'Hospital', 'Media', 'Carpenter / Contractor', 'CA Firm', 'Agency'];
 
   constructor() { }
 
@@ -81,22 +87,32 @@ export class OnboardingComponent implements OnInit {
     }
   }
 
-  toggleNewOnboardingModal() {
-    this.showNewOnboardingModal = !this.showNewOnboardingModal;
+  toggleWizard() {
+    this.showWizard = !this.showWizard;
   }
 
-  deployOnboarding() {
-    this.allRequests.unshift({
-      firmName: this.newRequest.firmName,
-      industry: this.newRequest.industry,
-      email: this.newRequest.email,
-      subdomain: this.newRequest.subdomain,
-      status: this.newRequest.status as any,
-      joined: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    });
+  getSelectedModules() {
+    return this.availableModules.filter(m => m.selected).map(m => m.name);
+  }
+
+  deployFirm() {
+    const freshRequest = {
+      firmName: this.newFirm.name,
+      industry: this.newFirm.industry,
+      email: this.newFirm.email,
+      status: 'pending',
+      modules: this.getSelectedModules(),
+      joined: 'Feb 17, 2026'
+    };
+
+    this.allRequests.unshift(freshRequest);
     this.filterRequests(this.activeFilter);
-    this.toggleNewOnboardingModal();
-    // Reset
-    this.newRequest = { firmName: '', industry: 'Law Firm', email: '', subdomain: '', status: 'pending', notes: '' };
+    this.toggleWizard();
+
+    alert(`PROVISIONING STARTED: ${this.newFirm.name} environment is being built with ${freshRequest.modules.length} modules.`);
+
+    // Reset wizard
+    this.newFirm = { name: '', industry: 'Law Firm', email: '', subdomain: '', primaryColor: '#6366f1', logo: '' };
+    this.availableModules.forEach(m => m.selected = (m.id === 'crm' || m.id === 'cases'));
   }
 }

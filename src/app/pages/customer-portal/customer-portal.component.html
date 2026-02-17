@@ -1,0 +1,127 @@
+<div class="public-portal">
+    <!-- Branded Navbar -->
+    <nav class="navbar px-4 py-3 bg-white shadow-sm border-bottom">
+        <div class="d-flex align-items-center">
+            <img src="assets/logo.svg" height="40" class="me-2" alt="Logo">
+            <span class="h5-bold mb-0" [style.color]="primaryColor">{{ firmName }}</span>
+        </div>
+        <div class="d-flex gap-4">
+            <a class="nav-link body-med active" href="#">Services</a>
+            <a class="nav-link body-med" href="#">My Bookings</a>
+            <button mat-flat-button [style.backgroundColor]="primaryColor" class="text-white rounded-pill px-4">Contact
+                Us</button>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div *ngIf="!isBookingComplete; else completeView">
+                    <div class="text-center mb-5 animate-fade-in">
+                        <h1 class="display-5 fw-bold text-dark mb-3">Book Your Next Service</h1>
+                        <p class="h5 text-muted">Select from our premium offerings below to get started with {{ firmName
+                            }}.</p>
+                    </div>
+
+                    <mat-stepper #stepper class="portal-stepper bg-transparent shadow-sm rounded-4 overflow-hidden"
+                        linear>
+                        <!-- Step 1: Service Selection -->
+                        <mat-step [completed]="selectedService !== null" label="Choose Service">
+                            <div class="row g-4 p-4">
+                                <div class="col-md-6" *ngFor="let s of services">
+                                    <div class="service-selection-card p-4 rounded-4 border bg-white d-flex align-items-center justify-content-between clickable transition"
+                                        [class.selected]="selectedService?.id === s.id" (click)="selectService(s)">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="icon-circle d-flex align-items-center justify-content-center rounded-circle"
+                                                [style.backgroundColor]="selectedService?.id === s.id ? primaryColor : '#f1f5f9'"
+                                                [style.color]="selectedService?.id === s.id ? 'white' : '#64748b'">
+                                                <mat-icon>{{ s.icon }}</mat-icon>
+                                            </div>
+                                            <div>
+                                                <div class="body-bold">{{ s.name }}</div>
+                                                <div class="caption-reg text-muted">{{ s.category }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="price-tag h5-bold mb-0" [style.color]="primaryColor">{{ s.price }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end p-4 border-top">
+                                <button mat-flat-button [style.backgroundColor]="primaryColor"
+                                    class="text-white px-5 rounded-3" matStepperNext [disabled]="!selectedService">Next:
+                                    Details</button>
+                            </div>
+                        </mat-step>
+
+                        <!-- Step 2: Details & Schedule -->
+                        <mat-step label="Schedule & Info">
+                            <div class="p-4">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label caption-bold">Contact Email</label>
+                                        <input type="email" class="form-control" [(ngModel)]="bookingData.customerEmail"
+                                            placeholder="your@email.com">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label caption-bold">Preffered Date</label>
+                                        <input type="date" class="form-control" [(ngModel)]="bookingData.date">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label caption-bold">Time Slot</label>
+                                        <select class="form-select" [(ngModel)]="bookingData.time">
+                                            <option value="10:00 AM">10:00 AM</option>
+                                            <option value="02:00 PM">02:00 PM</option>
+                                            <option value="04:00 PM">04:00 PM</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label caption-bold">Special Requests</label>
+                                        <textarea class="form-control" rows="3"
+                                            [(ngModel)]="bookingData.notes"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between p-4 border-top">
+                                <button mat-button matStepperPrevious>Back</button>
+                                <button mat-flat-button [style.backgroundColor]="primaryColor"
+                                    class="text-white px-5 rounded-3" (click)="confirmBooking()">Confirm
+                                    Booking</button>
+                            </div>
+                        </mat-step>
+                    </mat-stepper>
+                </div>
+
+                <ng-template #completeView>
+                    <div class="text-center p-5 bg-white rounded-4 shadow-sm animate-pop-in">
+                        <div class="success-icon mb-4">
+                            <mat-icon class="text-success"
+                                style="font-size: 80px; width: 80px; height: 80px;">check_circle</mat-icon>
+                        </div>
+                        <h2 class="display-6 fw-bold text-dark mb-3">Booking Confirmed!</h2>
+                        <p class="h5 text-muted mb-4">Thank you for choosing {{ firmName }}. A confirmation email has
+                            been sent to {{ bookingData.customerEmail }}.</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button mat-stroked-button class="rounded-pill px-4" (click)="isBookingComplete = false">Go
+                                Back</button>
+                            <button mat-flat-button [style.backgroundColor]="primaryColor"
+                                class="text-white rounded-pill px-4" (click)="isBookingComplete = false">Download
+                                Receipt</button>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-auto py-5 bg-dark text-white text-center">
+        <div class="container">
+            <div class="mb-3">
+                <img src="assets/logo.svg" height="30" class="filter-white opacity-50 mb-3">
+                <p class="caption-reg">Powered by Toucan Platform · White-Label Solutions for Modern Firms.</p>
+            </div>
+        </div>
+    </footer>
+</div>

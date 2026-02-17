@@ -1,0 +1,103 @@
+@import '../../../styles/palette';
+
+.public-portal {
+    background-color: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .nav-link {
+        color: #475569;
+
+        &:hover {
+            color: #1e293b;
+        }
+
+        &.active {
+            font-weight: 600;
+            color: #1e293b;
+        }
+    }
+
+    .portal-stepper {
+        background-color: #ffffff;
+        border: none !important;
+    }
+
+    .service-selection-card {
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+            border-color: rgba(99, 102, 241, 0.3) !important;
+        }
+
+        &.selected {
+            border-color: #6366f1 !important;
+            background-color: #f5f3ff;
+            border-width: 2px !important;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            transition: all 0.2s ease;
+
+            mat-icon {
+                font-size: 24px;
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+
+    .form-control,
+    .form-select {
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background-color: #fcfdfe;
+
+        &:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    .animate-pop-in {
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.filter-white {
+    filter: brightness(0) invert(1);
+}

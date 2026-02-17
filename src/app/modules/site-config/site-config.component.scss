@@ -1,112 +1,67 @@
 @import '../../../styles/palette';
 
 .settings-screen {
-  background-color: #f7f9fb;
+  background-color: #fcfdfe;
   min-height: 100vh;
 }
 
-.fit-content {
-  width: fit-content;
-}
+.custom-tabs {
+  ::ng-deep .mat-tab-label {
+    height: 60px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
 
-.tabs-nav {
-  background-color: #f1f5f9;
-
-  .tab-btn {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #64748b;
-    font-weight: 500;
-
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-      opacity: 0.7;
+    &.mat-tab-label-active {
+      opacity: 1;
+      color: #6366f1;
     }
+  }
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.5);
-    }
-
-    &.active {
-      background-color: #fff !important;
-      color: #1e293b;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-      mat-icon {
-        opacity: 1;
-      }
-    }
+  ::ng-deep .mat-ink-bar {
+    background-color: #6366f1 !important;
+    height: 3px !important;
   }
 }
 
-.main-settings-card {
-  border: 1px solid #e2e8f0 !important;
+.form-control-color {
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
 }
 
-.form-label {
-  color: #334155;
+.preview-box {
+  min-height: 250px;
+}
+
+.module-toggle-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #ffffff;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #6366f1 !important;
+  }
+}
+
+.text-indigo {
+  color: #6366f1;
+}
+
+.alert-info {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6 !important;
 }
 
 .form-control,
 .form-select {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e2e8f0 !important;
+  font-size: 13px;
   padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
 
   &:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-  }
-}
-
-.logo-upload-box {
-  background-color: #f8fafc;
-  border: 2px dashed #cbd5e1 !important;
-  transition: all 0.2s;
-
-  &:hover {
     border-color: #6366f1 !important;
-    background-color: #f1f5f9;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
   }
-}
-
-.color-preview {
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.template-card {
-  transition: all 0.2s;
-  background-color: #fff;
-  border-color: #e2e8f0 !important;
-
-  &:hover {
-    border-color: #6366f1 !important;
-    transform: translateY(-2px);
-  }
-
-  &.active {
-    border-color: #6366f1 !important;
-    background-color: #f5f3ff;
-    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.1) !important;
-  }
-}
-
-.role-item {
-  border: 1px solid transparent !important;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #fff !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  }
-}
-
-.clickable {
-  cursor: pointer;
 }

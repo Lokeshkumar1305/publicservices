@@ -1,161 +1,164 @@
 <div class="settings-screen p-4">
-  <!-- Header -->
-  <div class="mb-4">
-    <h1 class="h2-bold text-dark mb-1">Settings</h1>
-    <p class="body-reg text-muted mb-0">Configure your workspace, branding, and preferences</p>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2-bold text-dark mb-1">Firm Configuration</h1>
+      <p class="body-reg text-muted mb-0">Manage your white-labeled application, payment gateways, and active modules.
+      </p>
+    </div>
+    <div class="d-flex gap-3">
+      <button mat-stroked-button class="rounded-3 border-light shadow-sm" (click)="previewSite()">
+        <mat-icon class="me-1">open_in_new</mat-icon> Portal Preview
+      </button>
+      <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="saveConfig()">
+        <mat-icon class="me-1">save</mat-icon> Deploy Changes
+      </button>
+    </div>
   </div>
 
-  <!-- Tabs Navigation -->
-  <div class="tabs-nav d-flex gap-2 mb-4 p-1 bg-light rounded-3 shadow-sm fit-content">
-    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'general'"
-      (click)="activeTab = 'general'">
-      <mat-icon class="me-2">business</mat-icon> General
-    </button>
-    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'branding'"
-      (click)="activeTab = 'branding'">
-      <mat-icon class="me-2">palette</mat-icon> Branding
-    </button>
-    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'templates'"
-      (click)="activeTab = 'templates'">
-      <mat-icon class="me-2">language</mat-icon> Templates
-    </button>
-    <button mat-button class="tab-btn rounded-2 px-4 py-2" [class.active]="activeTab === 'team'"
-      (click)="activeTab = 'team'">
-      <mat-icon class="me-2">groups</mat-icon> Team
-    </button>
-  </div>
-
-  <!-- Tab Content -->
-  <mat-card class="border-0 shadow-sm p-4 rounded-4 main-settings-card">
-
-    <!-- General Tab -->
-    <div *ngIf="activeTab === 'general'" class="tab-pane">
-      <h3 class="title1-bold mb-4">Organization Details</h3>
-      <div class="row g-4">
-        <div class="col-md-6">
-          <label class="form-label body-bold mb-2">Organization Name</label>
-          <input type="text" class="form-control" [(ngModel)]="organizationDetails.name"
-            placeholder="Sterling Legal Partners">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label body-bold mb-2">Industry</label>
-          <select class="form-select" [(ngModel)]="organizationDetails.industry">
-            <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label body-bold mb-2">Email</label>
-          <input type="email" class="form-control" [(ngModel)]="organizationDetails.email"
-            placeholder="info@sterlinglegal.com">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label body-bold mb-2">Phone</label>
-          <input type="text" class="form-control" [(ngModel)]="organizationDetails.phone"
-            placeholder="+1 (555) 234-5678">
-        </div>
-        <div class="col-12">
-          <label class="form-label body-bold mb-2">Tagline</label>
-          <input type="text" class="form-control" [(ngModel)]="organizationDetails.tagline"
-            placeholder="Excellence in Legal Services">
-        </div>
-        <div class="col-12">
-          <label class="form-label body-bold mb-2">Address</label>
-          <textarea class="form-control" [(ngModel)]="organizationDetails.address" rows="3"
-            placeholder="500 Market Street..."></textarea>
-        </div>
-      </div>
-      <div class="mt-5">
-        <button mat-flat-button color="primary" class="rounded-2 px-4 py-2" (click)="saveGeneral()">Save
-          Changes</button>
-      </div>
-    </div>
-
-    <!-- Branding Tab -->
-    <div *ngIf="activeTab === 'branding'" class="tab-pane">
-      <h3 class="title1-bold mb-4">White Label Branding</h3>
-      <div class="row g-4">
-        <div class="col-md-5">
-          <label class="form-label body-bold mb-2">Logo</label>
-          <div
-            class="logo-upload-box border-dashed rounded-3 d-flex flex-column align-items-center justify-content-center p-5 clickable">
-            <mat-icon class="text-muted mb-2" style="font-size: 32px; width: 32px; height: 32px">upload</mat-icon>
-            <span class="body-med text-primary">Upload Logo</span>
+  <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+    <mat-tab-group animationDuration="200ms" class="custom-tabs">
+      <!-- Branding & UX -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <div class="d-flex align-items-center gap-2 px-2">
+            <mat-icon style="font-size: 20px;">palette</mat-icon>
+            <span class="body-med">White Labeling</span>
           </div>
-        </div>
-        <div class="col-md-7">
-          <div class="mb-3">
-            <label class="form-label body-bold mb-2">Custom Domain</label>
-            <input type="text" class="form-control" [(ngModel)]="branding.domain" placeholder="www.yourfirm.com">
-          </div>
-          <div class="mb-3">
-            <label class="form-label body-bold mb-2">Primary Color</label>
-            <div class="d-flex gap-2">
-              <div class="color-preview rounded-1" [style.backgroundColor]="branding.primaryColor"></div>
-              <input type="text" class="form-control" [(ngModel)]="branding.primaryColor" placeholder="#6366f1">
+        </ng-template>
+
+        <div class="p-4">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <h3 class="title2-bold mb-4">Branding Visuals</h3>
+
+              <div class="mb-4">
+                <label class="form-label caption-bold text-dark">Organization Name</label>
+                <input type="text" class="form-control rounded-3" [(ngModel)]="orgDetails.name">
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label caption-bold text-dark">Primary Color</label>
+                <div class="d-flex gap-3 align-items-center">
+                  <input type="color" class="form-control form-control-color p-1 rounded-circle"
+                    [(ngModel)]="branding.primaryColor">
+                  <span class="body-reg text-muted">{{ branding.primaryColor }}</span>
+                </div>
+                <div class="caption-reg text-muted mt-2">This color will be applied to all primary buttons and
+                  indicators in your customer portal.</div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label caption-bold text-dark">Corner Radius (px)</label>
+                <input type="number" class="form-control rounded-3" [(ngModel)]="branding.buttonRadius">
+              </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label body-bold mb-2">Secondary Color</label>
-            <div class="d-flex gap-2">
-              <div class="color-preview rounded-1" [style.backgroundColor]="branding.secondaryColor"></div>
-              <input type="text" class="form-control" [(ngModel)]="branding.secondaryColor" placeholder="#8b5cf6">
+
+            <div class="col-md-6">
+              <div
+                class="preview-box p-4 rounded-4 border bg-light h-100 d-flex flex-column align-items-center justify-content-center">
+                <div class="caption-bold text-muted text-uppercase mb-3">Live Button Preview</div>
+                <button mat-flat-button [style.backgroundColor]="branding.primaryColor"
+                  [style.borderRadius.px]="branding.buttonRadius" class="px-5 py-2 text-white">Book Service</button>
+                <div class="mt-4 text-center">
+                  <img [src]="branding.logoUrl" height="50" alt="Logo Preview" class="opacity-50">
+                  <div class="caption-reg text-muted mt-2">Branded Logo</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </mat-tab>
 
-      <!-- Tiny Preview Area -->
-      <div class="mt-4 p-4 bg-light rounded-3">
-        <div class="caption-bold text-muted text-uppercase mb-3">Preview</div>
-        <div class="d-flex align-items-center gap-3">
-          <span class="body-bold text-primary" [style.color]="branding.primaryColor">Sterling Legal Partners</span>
-          <div class="d-flex gap-2">
-            <div class="rounded-circle" style="width: 20px; height: 20px;"
-              [style.backgroundColor]="branding.primaryColor"></div>
-            <div class="rounded-circle" style="width: 20px; height: 20px;"
-              [style.backgroundColor]="branding.secondaryColor"></div>
+      <!-- Payments Config -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <div class="d-flex align-items-center gap-2 px-2">
+            <mat-icon style="font-size: 20px;">payments</mat-icon>
+            <span class="body-med">Payment Config</span>
           </div>
-        </div>
-      </div>
+        </ng-template>
 
-      <div class="mt-5">
-        <button mat-flat-button color="primary" class="rounded-2 px-4 py-2" (click)="saveBranding()">Save
-          Branding</button>
-      </div>
-    </div>
+        <div class="p-4">
+          <div class="row g-4">
+            <div class="col-md-8">
+              <h3 class="title2-bold mb-4">Financial Gateway Settings</h3>
 
-    <!-- Templates Tab -->
-    <div *ngIf="activeTab === 'templates'" class="tab-pane">
-      <h3 class="title1-bold mb-2">Industry Templates</h3>
-      <p class="body-reg text-muted mb-4">Choose a template to pre-configure your modules, workflows, and settings</p>
+              <div class="mb-4">
+                <label class="form-label caption-bold text-dark">Provider</label>
+                <select class="form-select rounded-3" [(ngModel)]="paymentConfig.provider">
+                  <option value="Stripe">Stripe (Recommended)</option>
+                  <option value="PayPal">PayPal Business</option>
+                  <option value="Razorpay">Razorpay</option>
+                </select>
+              </div>
 
-      <div class="row g-4">
-        <div class="col-md-4" *ngFor="let template of templates">
-          <div class="template-card p-4 border rounded-4 shadow-sm h-100 clickable" [class.active]="template.applied"
-            (click)="applyTemplate(template)">
-            <h4 class="title2-bold mb-2">{{ template.title }}</h4>
-            <p class="caption-reg text-muted mb-3">{{ template.description }}</p>
-            <div *ngIf="template.applied" class="caption-bold text-primary d-flex align-items-center">
-              <mat-icon class="me-1" style="font-size: 14px; width: 14px; height: 14px">check</mat-icon> Applied
+              <div class="mb-4">
+                <label class="form-label caption-bold text-dark">Secret API Key *</label>
+                <input type="password" class="form-control rounded-3" [(ngModel)]="paymentConfig.apiKey">
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label caption-bold text-dark">Currency</label>
+                  <select class="form-select rounded-3" [(ngModel)]="paymentConfig.currency">
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - Pound Sterling</option>
+                  </select>
+                </div>
+                <div class="col-md-6 d-flex align-items-end pb-1 px-4">
+                  <mat-slide-toggle color="primary" [(ngModel)]="paymentConfig.autoInvoice">Auto-generate
+                    Invoices</mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="alert alert-info border-0 rounded-4 p-4 shadow-sm">
+                <div class="d-flex gap-2 mb-2">
+                  <mat-icon class="text-primary">verified_user</mat-icon>
+                  <div class="body-bold">PCI Compliance</div>
+                </div>
+                <div class="caption-reg text-muted">
+                  Toucan does not store full card details. All financial transactions are tokenized through {{
+                  paymentConfig.provider }}.
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </mat-tab>
 
-    <!-- Team Tab -->
-    <div *ngIf="activeTab === 'team'" class="tab-pane">
-      <h3 class="title1-bold mb-2">Team & Roles</h3>
-      <p class="body-reg text-muted mb-4">Manage team members and their access levels</p>
+      <!-- Modules Hub -->
+      <mat-tab>
+        <ng-template matTabLabel>
+          <div class="d-flex align-items-center gap-2 px-2">
+            <mat-icon style="font-size: 20px;">grid_view</mat-icon>
+            <span class="body-med">Modules Hub</span>
+          </div>
+        </ng-template>
 
-      <div class="d-flex flex-column gap-3">
-        <div *ngFor="let role of roles"
-          class="role-item p-3 bg-light rounded-3 d-flex flex-column gap-1 border border-white">
-          <div class="body-bold text-dark">{{ role.name }}</div>
-          <div class="caption-reg text-muted">{{ role.description }}</div>
+        <div class="p-4">
+          <h3 class="title2-bold mb-4">Enable/Disable Application Features</h3>
+          <div class="row g-3">
+            <div class="col-md-6" *ngFor="let mod of moduleControl">
+              <div class="module-toggle-card p-3 rounded-4 border d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="icon-circle bg-light d-flex align-items-center justify-content-center rounded-circle"
+                    style="width: 40px; height: 40px;">
+                    <mat-icon class="text-indigo" style="font-size: 20px;">settings_suggest</mat-icon>
+                  </div>
+                  <div>
+                    <div class="body-bold">{{ mod.name }}</div>
+                    <div class="caption-reg text-muted">{{ mod.tooltip }}</div>
+                  </div>
+                </div>
+                <mat-slide-toggle color="primary" [(ngModel)]="mod.enabled"></mat-slide-toggle>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-
+      </mat-tab>
+    </mat-tab-group>
   </mat-card>
 </div>

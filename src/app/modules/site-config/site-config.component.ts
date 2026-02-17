@@ -10,6 +10,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-site-config',
   standalone: true,
@@ -29,54 +31,50 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './site-config.component.scss',
 })
 export class SiteConfigComponent implements OnInit {
-  activeTab: string = 'general';
+  activeTab: string = 'branding';
 
-  organizationDetails = {
-    name: 'Sterling Legal Partners',
-    industry: 'Law Firm',
-    email: 'info@sterlinglegal.com',
-    phone: '+1 (555) 234-5678',
-    tagline: 'Excellence in Legal Services',
-    address: '500 Market Street, Suite 1200, San Francisco, CA 94105',
+  orgDetails = {
+    name: 'Toucan Media Group',
+    industry: 'Media',
+    subdomain: 'media-group',
+    email: 'admin@mediagroup.com',
+    supportPhone: '+1 800-MEDIA-01'
   };
 
   branding = {
-    logo: null,
-    domain: 'www.yourfirm.com',
     primaryColor: '#6366f1',
-    secondaryColor: '#8b5cf6',
+    logoUrl: 'assets/logo.svg',
+    fontFamily: 'Inter',
+    buttonRadius: '8',
+    favicon: null
   };
 
-  templates = [
-    { title: 'Law Firm', description: 'Case management, client billing, document vault', applied: true },
-    { title: 'Consulting Firm', description: 'Timesheet, invoice, reports, CRM', applied: false },
-    { title: 'Event Management', description: 'Event booking, vendor payments, budget tracking', applied: false },
-    { title: 'Carpenter / Contractor', description: 'Work orders, material tracking, site management', applied: false },
-    { title: 'CA Firm', description: 'Tax filing, compliance, document management', applied: false },
-    { title: 'Agency', description: 'Project management, client reporting, billing', applied: false },
+  paymentConfig = {
+    provider: 'Stripe',
+    apiKey: 'sk_test_••••••••••••••••••••••••',
+    webhookSecret: 'whsec_••••••••••••••••••••••',
+    currency: 'USD',
+    autoInvoice: true,
+    platformFee: '5.0'
+  };
+
+  moduleControl = [
+    { id: 'events', name: 'Event Booking', enabled: true, tooltip: 'Allow customers to book media events' },
+    { id: 'payments', name: 'Online Payments', enabled: true, tooltip: 'Enable checkout for services' },
+    { id: 'recon', name: 'Auto-Reconciliation', enabled: false, tooltip: 'Match bank statements automatically' },
+    { id: 'dms', name: 'Document Vault', enabled: true, tooltip: 'Secure storage for media files' },
   ];
 
-  roles = [
-    { name: 'Admin', description: 'Full access to all modules and settings' },
-    { name: 'Manager', description: 'Can manage cases, clients, and team members' },
-    { name: 'Operator', description: 'Can handle day-to-day operations' },
-    { name: 'Viewer', description: 'Read-only access to dashboards and reports' },
-  ];
-
-  industries = ['Law Firm', 'Consulting Firm', 'Real Estate', 'Education', 'Healthcare', 'Construction'];
+  constructor(private router: Router) { }
 
   ngOnInit(): void { }
 
-  saveGeneral() {
-    console.log('General settings saved:', this.organizationDetails);
+  saveConfig() {
+    alert('CONFIGURATION DEPLOYED: Your white-labeled application settings have been updated across the cluster.');
   }
 
-  saveBranding() {
-    console.log('Branding settings saved:', this.branding);
-  }
-
-  applyTemplate(template: any) {
-    this.templates.forEach(t => (t.applied = false));
-    template.applied = true;
+  previewSite() {
+    this.router.navigate(['/portal-preview']);
   }
 }
+

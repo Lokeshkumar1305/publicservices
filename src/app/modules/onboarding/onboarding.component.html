@@ -2,128 +2,153 @@
   <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h1 class="h2-bold text-dark mb-1">Client Onboarding</h1>
-      <p class="body-reg text-muted mb-0">{{ filteredRequests.length }} of {{ allRequests.length }} onboarding requests
-      </p>
+      <h1 class="h2-bold text-dark mb-1">Provisioning Console</h1>
+      <p class="body-reg text-muted mb-0">Onboard new clients and deploy custom branded modules.</p>
     </div>
     <div class="d-flex gap-3 align-items-center">
-      <div class="search-box position-relative">
-        <mat-icon class="search-icon">search</mat-icon>
-        <input type="text" placeholder="Search requests..." class="form-control ps-5 rounded-3 border-light shadow-sm">
-      </div>
-
-      <!-- Status Filters -->
       <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
-        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'all'"
+        <button mat-button class="filter-btn rounded-2" [class.active]="activeFilter === 'all'"
           (click)="filterRequests('all')">All</button>
-        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'pending'"
+        <button mat-button class="filter-btn rounded-2" [class.active]="activeFilter === 'pending'"
           (click)="filterRequests('pending')">Pending</button>
-        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'in-progress'"
-          (click)="filterRequests('in-progress')">In Progress</button>
-        <button mat-button class="filter-btn rounded-2 px-3 py-1" [class.active]="activeFilter === 'completed'"
-          (click)="filterRequests('completed')">Completed</button>
+        <button mat-button class="filter-btn rounded-2" [class.active]="activeFilter === 'completed'"
+          (click)="filterRequests('completed')">Active</button>
       </div>
 
-      <button mat-flat-button color="primary" class="rounded-3 px-3" (click)="toggleNewOnboardingModal()">
-        <mat-icon class="me-1">add</mat-icon> New Onboarding
+      <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="toggleWizard()">
+        <mat-icon class="me-1">rocket_launch</mat-icon> Provision New Firm
       </button>
     </div>
   </div>
 
-  <!-- Onboarding Table -->
+  <!-- Onboarding Progress Table -->
   <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
     <div class="table-responsive">
       <table class="table mb-0">
         <thead>
           <tr>
-            <th class="ps-4" style="width: 50px;">
-              <mat-checkbox color="primary"></mat-checkbox>
-            </th>
-            <th class="caption-bold text-muted text-uppercase">Firm Name</th>
-            <th class="caption-bold text-muted text-uppercase">Industry</th>
-            <th class="caption-bold text-muted text-uppercase">Email</th>
-            <th class="caption-bold text-muted text-uppercase">Subdomain</th>
-            <th class="caption-bold text-muted text-uppercase text-center">Status</th>
-            <th class="caption-bold text-muted text-uppercase">Joined</th>
+            <th class="ps-4">Firm / Brand</th>
+            <th>Industry</th>
+            <th>Email</th>
+            <th>Modules Deployed</th>
+            <th class="text-center">Cloud Status</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let req of filteredRequests" class="align-middle">
             <td class="ps-4">
-              <mat-checkbox color="primary" [(ngModel)]="req.selected"></mat-checkbox>
+              <div class="body-bold text-dark">{{ req.firmName }}</div>
+              <div class="caption-reg text-indigo"><u>{{ req.firmName.toLowerCase().replace(' ', '-') }}.toucan.ai</u>
+              </div>
             </td>
-            <td class="body-bold text-indigo">{{ req.firmName }}</td>
             <td class="body-reg text-muted">{{ req.industry }}</td>
             <td class="body-reg text-muted">{{ req.email }}</td>
-            <td class="caption-reg text-indigo"><u>{{ req.subdomain }}.toucan.ai</u></td>
+            <td>
+              <div class="d-flex gap-1 flex-wrap">
+                <span *ngFor="let m of req.modules" class="module-chip text-nowrap">{{ m }}</span>
+              </div>
+            </td>
             <td class="text-center">
               <span class="badge status-badge" [ngClass]="req.status">
-                {{ req.status }}
+                {{ req.status === 'completed' ? 'Live' : 'Provisioning' }}
               </span>
             </td>
-            <td class="body-reg text-muted">{{ req.joined }}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </mat-card>
 
-  <!-- New Onboarding Modal -->
-  <div class="modal-overlay" *ngIf="showNewOnboardingModal" (click)="toggleNewOnboardingModal()">
+  <!-- Provisioning Wizard (Modal) -->
+  <div class="modal-overlay" *ngIf="showWizard" (click)="toggleWizard()">
     <div class="modal-container p-4 rounded-4 shadow-lg bg-white" (click)="$event.stopPropagation()">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="title1-bold m-0">New Client Onboarding</h2>
-        <button mat-icon-button (click)="toggleNewOnboardingModal()">
+        <h2 class="title1-bold m-0">Tenant Provisioning Engine</h2>
+        <button mat-icon-button (click)="toggleWizard()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
 
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label caption-bold text-dark">Firm Legal Name *</label>
-          <input type="text" class="form-control rounded-3" [(ngModel)]="newRequest.firmName"
-            placeholder="e.g. Smith Legal Group">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label caption-bold text-dark">Contact Email *</label>
-          <input type="email" class="form-control rounded-3" [(ngModel)]="newRequest.email"
-            placeholder="email@firm.com">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label caption-bold text-dark">Target Subdomain</label>
-          <div class="input-group">
-            <input type="text" class="form-control rounded-start-3" [(ngModel)]="newRequest.subdomain"
-              placeholder="firm-name">
-            <span class="input-group-text bg-light border-start-0 runded-end-3">.toucan.ai</span>
+      <mat-stepper #stepper class="custom-stepper">
+        <!-- Step 1: Identity -->
+        <mat-step>
+          <ng-template matStepLabel>White Label Setup</ng-template>
+          <div class="row g-3 mt-2">
+            <div class="col-md-6">
+              <label class="form-label caption-bold text-dark">Brand/Firm Name *</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="newFirm.name"
+                placeholder="e.g. MediaOne Global">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label caption-bold text-dark">Industry Vertical</label>
+              <select class="form-select rounded-3" [(ngModel)]="newFirm.industry">
+                <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label caption-bold text-dark">Primary Brand Color</label>
+              <div class="d-flex gap-3 align-items-center">
+                <input type="color" class="form-control form-control-color p-1 rounded-circle"
+                  [(ngModel)]="newFirm.primaryColor">
+                <span class="caption-reg text-muted">{{ newFirm.primaryColor }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label caption-bold text-dark">Industry Template</label>
-          <select class="form-select rounded-3" [(ngModel)]="newRequest.industry">
-            <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
-          </select>
-        </div>
+          <div class="d-flex justify-content-end mt-4">
+            <button mat-flat-button color="primary" matStepperNext>Select Modules</button>
+          </div>
+        </mat-step>
 
-        <div class="col-md-6">
-          <label class="form-label caption-bold text-dark">Initial Status</label>
-          <select class="form-select rounded-3" [(ngModel)]="newRequest.status">
-            <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
-          </select>
-        </div>
+        <!-- Step 2: Modules Selection (Zoho-inspired) -->
+        <mat-step>
+          <ng-template matStepLabel>Module Marketplace</ng-template>
+          <div class="module-grid mt-3">
+            <div *ngFor="let module of availableModules"
+              class="module-card p-3 rounded-4 border d-flex flex-column align-items-center text-center clickable transition"
+              [class.selected]="module.selected" (click)="module.selected = !module.selected">
+              <div class="module-icon-box mb-2">
+                <mat-icon>{{ module.icon }}</mat-icon>
+              </div>
+              <div class="body-bold mb-1">{{ module.name }}</div>
+              <div class="caption-reg text-muted">{{ module.description }}</div>
+              <div class="module-check position-absolute">
+                <mat-icon>{{ module.selected ? 'check_circle' : 'add_circle_outline' }}</mat-icon>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mt-4">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-flat-button color="primary" matStepperNext>Review & Deploy</button>
+          </div>
+        </mat-step>
 
-        <div class="col-12 mt-3">
-          <label class="form-label caption-bold text-dark">Internal Notes</label>
-          <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newRequest.notes"
-            placeholder="Any specific requirements..."></textarea>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
-        <button mat-button class="rounded-3 px-4" (click)="toggleNewOnboardingModal()">Cancel</button>
-        <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="deployOnboarding()">Provision
-          Environment</button>
-      </div>
+        <!-- Step 3: Deployment -->
+        <mat-step>
+          <ng-template matStepLabel>Deployment</ng-template>
+          <div class="deployment-summary p-4 bg-light rounded-4 mt-3">
+            <h4 class="body-bold mb-3">Deployment Architecture Preview</h4>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2 d-flex gap-2">
+                <mat-icon class="text-success" style="font-size: 18px;">cloud_done</mat-icon>
+                <span class="body-reg">Dedicated Subdomain: <b>{{ newFirm.name.toLowerCase().replace(' ', '-')
+                    }}.toucan.ai</b></span>
+              </li>
+              <li class="mb-2 d-flex gap-2">
+                <mat-icon class="text-success" style="font-size: 18px;">palette</mat-icon>
+                <span class="body-reg">White Labeling: <b>Applied with Branding Presets</b></span>
+              </li>
+              <li class="mb-2 d-flex gap-2">
+                <mat-icon class="text-success" style="font-size: 18px;">layers</mat-icon>
+                <span class="body-reg">Modules to provision: <b>{{ getSelectedModules().join(', ') }}</b></span>
+              </li>
+            </ul>
+          </div>
+          <div class="d-flex justify-content-between mt-4">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-flat-button color="primary" (click)="deployFirm()">Bootstrap Now</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
     </div>
   </div>
 </div>
