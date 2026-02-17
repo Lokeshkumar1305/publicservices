@@ -50,12 +50,20 @@ export class SiteConfigComponent implements OnInit {
   };
 
   paymentConfig = {
-    provider: 'Stripe',
-    apiKey: 'sk_test_••••••••••••••••••••••••',
+    provider: 'Toucan Payment',
+    apiKey: 'pk_live_••••••••••••••••••••••••',
     webhookSecret: 'whsec_••••••••••••••••••••••',
     currency: 'USD',
     autoInvoice: true,
     platformFee: '5.0'
+  };
+
+  portalConfig = {
+    showServiceCatalog: true,
+    showBookings: true,
+    showInvoices: false,
+    welcomeMessage: 'Welcome to our platform. Explore our premium media services below.',
+    heroTitle: 'Book Your Next Production'
   };
 
   moduleControl = [
@@ -63,6 +71,7 @@ export class SiteConfigComponent implements OnInit {
     { id: 'payments', name: 'Online Payments', enabled: true, tooltip: 'Enable checkout for services' },
     { id: 'recon', name: 'Auto-Reconciliation', enabled: false, tooltip: 'Match bank statements automatically' },
     { id: 'dms', name: 'Document Vault', enabled: true, tooltip: 'Secure storage for media files' },
+    { id: 'portal', name: 'Customer Portal', enabled: true, tooltip: 'Enable the public facing booking site' },
   ];
 
   constructor(private router: Router) { }

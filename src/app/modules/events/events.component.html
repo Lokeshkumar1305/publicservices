@@ -1,0 +1,197 @@
+<div class="events-manager p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2-bold text-dark mb-1">Event Control Center</h1>
+            <p class="body-reg text-muted mb-0">Define event types, manage ticket inventory, and launch marketing
+                coupons.</p>
+        </div>
+        <button mat-flat-button color="primary" class="rounded-3 px-4 shadow-sm" (click)="toggleEventModal()">
+            <mat-icon class="me-1">add_circle</mat-icon> Create New Event
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <mat-card class="stat-card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icon-box bg-primary-light text-primary rounded-circle">
+                        <mat-icon>event</mat-icon>
+                    </div>
+                    <div>
+                        <div class="caption-bold text-muted text-uppercase">Active Events</div>
+                        <div class="h3-bold mb-0">12</div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-md-3">
+            <mat-card class="stat-card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icon-box bg-success-light text-success rounded-circle">
+                        <mat-icon>confirmation_number</mat-icon>
+                    </div>
+                    <div>
+                        <div class="caption-bold text-muted text-uppercase">Tickets Sold</div>
+                        <div class="h3-bold mb-0">842</div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-md-3">
+            <mat-card class="stat-card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icon-box bg-warning-light text-warning rounded-circle">
+                        <mat-icon>payments</mat-icon>
+                    </div>
+                    <div>
+                        <div class="caption-bold text-muted text-uppercase">Gross Revenue</div>
+                        <div class="h3-bold mb-0">$24,150</div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-md-3">
+            <mat-card class="stat-card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icon-box bg-info-light text-info rounded-circle">
+                        <mat-icon>redeem</mat-icon>
+                    </div>
+                    <div>
+                        <div class="caption-bold text-muted text-uppercase">Coupon Usage</div>
+                        <div class="h3-bold mb-0">18%</div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+    <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+        <mat-tab-group animationDuration="200ms" class="custom-tabs">
+
+            <!-- Events List -->
+            <mat-tab>
+                <ng-template matTabLabel>
+                    <div class="d-flex align-items-center gap-2 px-2">
+                        <mat-icon style="font-size: 20px;">list</mat-icon>
+                        <span class="body-med">Event List</span>
+                    </div>
+                </ng-template>
+
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="ps-4">Event Name</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Ticketing</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let event of events">
+                                <td class="ps-4">
+                                    <div class="body-bold text-dark">{{ event.name }}</div>
+                                    <div class="caption-reg text-indigo">${{ event.price }} per ticket</div>
+                                </td>
+                                <td><span class="type-chip">{{ event.type }}</span></td>
+                                <td class="body-reg text-muted">{{ event.date }}</td>
+                                <td>
+                                    <div class="progress mb-1" style="height: 6px; width: 120px;">
+                                        <div class="progress-bar"
+                                            [style.width.%]="(event.totalTickets - event.remainingTickets) / event.totalTickets * 100">
+                                        </div>
+                                    </div>
+                                    <div class="caption-bold">{{ event.totalTickets - event.remainingTickets }} / {{
+                                        event.totalTickets }} sold</div>
+                                </td>
+                                <td>
+                                    <span class="badge status-badge" [ngClass]="getStatusClass(event.status)">{{
+                                        event.status }}</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button mat-icon-button class="text-muted"><mat-icon>edit</mat-icon></button>
+                                    <button mat-icon-button class="text-muted"><mat-icon>analytics</mat-icon></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab>
+
+            <!-- Coupons Manager -->
+            <mat-tab>
+                <ng-template matTabLabel>
+                    <div class="d-flex align-items-center gap-2 px-2">
+                        <mat-icon style="font-size: 20px;">local_offer</mat-icon>
+                        <span class="body-med">Marketing Coupons</span>
+                    </div>
+                </ng-template>
+                <div class="p-4">
+                    <div class="row g-4">
+                        <div *ngFor="let coupon of coupons" class="col-md-6">
+                            <div
+                                class="coupon-card p-4 rounded-4 border border-dashed d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="h4-bold text-primary mb-1">{{ coupon.code }}</div>
+                                    <div class="body-med text-dark">{{ coupon.discount }} OFF ({{ coupon.type }})</div>
+                                    <div class="caption-reg text-muted">Redemptions: {{ coupon.usage }}</div>
+                                </div>
+                                <mat-slide-toggle [checked]="true" color="primary"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+
+    <!-- Create Event Modal -->
+    <div class="modal-overlay" *ngIf="showEventModal" (click)="toggleEventModal()">
+        <div class="modal-content-custom p-4 rounded-5 bg-white shadow-lg" (click)="$event.stopPropagation()">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="title1-bold m-0">Launch Branded Event</h2>
+                <button mat-icon-button (click)="toggleEventModal()"><mat-icon>close</mat-icon></button>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label class="form-label caption-bold">Event Title</label>
+                    <input type="text" class="form-control rounded-3" [(ngModel)]="newEvent.name"
+                        placeholder="e.g. Summer Music Festival">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold">Category</label>
+                    <select class="form-select rounded-3" [(ngModel)]="newEvent.type">
+                        <option *ngFor="let type of eventTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold">Date</label>
+                    <input type="date" class="form-control rounded-3" [(ngModel)]="newEvent.date">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold">Ticket Inventory (Capacity)</label>
+                    <input type="number" class="form-control rounded-3" [(ngModel)]="newEvent.totalTickets">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label caption-bold">Ticket Price ($)</label>
+                    <input type="number" class="form-control rounded-3" [(ngModel)]="newEvent.price">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label caption-bold">Event Description</label>
+                    <textarea class="form-control rounded-3" rows="3" [(ngModel)]="newEvent.description"></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <button mat-button (click)="toggleEventModal()">Discard</button>
+                <button mat-flat-button color="primary" class="rounded-3 px-4" (click)="createEvent()">Deploy
+                    Event</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -19,75 +19,112 @@
 
                 <div *ngIf="!isBookingComplete; else completeView">
                     <div class="text-center mb-5 animate-fade-in">
-                        <h1 class="display-5 fw-bold text-dark mb-3">Book Your Next Service</h1>
-                        <p class="h5 text-muted">Select from our premium offerings below to get started with {{ firmName
-                            }}.</p>
+                        <h1 class="display-5 fw-bold text-dark mb-3">{{ heroTitle }}</h1>
+                        <p class="h5 text-muted">{{ welcomeMessage }}</p>
                     </div>
 
                     <mat-stepper #stepper class="portal-stepper bg-transparent shadow-sm rounded-4 overflow-hidden"
                         linear>
-                        <!-- Step 1: Service Selection -->
-                        <mat-step [completed]="selectedService !== null" label="Choose Service">
+                        <!-- Step 1: Event Selection -->
+                        <mat-step [completed]="selectedEvent !== null" label="Choose Event">
                             <div class="row g-4 p-4">
-                                <div class="col-md-6" *ngFor="let s of services">
+                                <div class="col-md-6" *ngFor="let e of events">
                                     <div class="service-selection-card p-4 rounded-4 border bg-white d-flex align-items-center justify-content-between clickable transition"
-                                        [class.selected]="selectedService?.id === s.id" (click)="selectService(s)">
+                                        [class.selected]="selectedEvent?.id === e.id" (click)="selectEvent(e)">
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="icon-circle d-flex align-items-center justify-content-center rounded-circle"
-                                                [style.backgroundColor]="selectedService?.id === s.id ? primaryColor : '#f1f5f9'"
-                                                [style.color]="selectedService?.id === s.id ? 'white' : '#64748b'">
-                                                <mat-icon>{{ s.icon }}</mat-icon>
+                                                [style.backgroundColor]="selectedEvent?.id === e.id ? primaryColor : '#f1f5f9'"
+                                                [style.color]="selectedEvent?.id === e.id ? 'white' : '#64748b'">
+                                                <mat-icon>{{ e.icon }}</mat-icon>
                                             </div>
                                             <div>
-                                                <div class="body-bold">{{ s.name }}</div>
-                                                <div class="caption-reg text-muted">{{ s.category }}</div>
+                                                <div class="body-bold">{{ e.name }}</div>
+                                                <div class="caption-reg text-muted">{{ e.date }} · {{ e.type }}</div>
                                             </div>
                                         </div>
-                                        <div class="price-tag h5-bold mb-0" [style.color]="primaryColor">{{ s.price }}
+                                        <div class="price-tag h5-bold mb-0" [style.color]="primaryColor">
+                                            {{ e.price === 0 ? 'FREE' : '$' + e.price }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end p-4 border-top">
                                 <button mat-flat-button [style.backgroundColor]="primaryColor"
-                                    class="text-white px-5 rounded-3" matStepperNext [disabled]="!selectedService">Next:
-                                    Details</button>
+                                    class="text-white px-5 rounded-3" matStepperNext [disabled]="!selectedEvent">Next:
+                                    Tickets</button>
                             </div>
                         </mat-step>
 
-                        <!-- Step 2: Details & Schedule -->
-                        <mat-step label="Schedule & Info">
+                        <!-- Step 2: Tickets & Info -->
+                        <mat-step label="Tickets & Info">
                             <div class="p-4">
                                 <div class="row g-4">
+                                    <div class="col-md-12">
+                                        <div
+                                            class="selected-summary p-3 rounded-4 bg-light d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="body-bold text-dark">{{ selectedEvent?.name }}</div>
+                                                <div class="caption-reg text-muted">{{ selectedEvent?.date }}</div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <span class="caption-bold">Tickets:</span>
+                                                <div
+                                                    class="d-flex align-items-center border rounded-pill bg-white px-2">
+                                                    <button mat-icon-button
+                                                        (click)="ticketCount > 1 ? ticketCount = ticketCount - 1 : null"
+                                                        style="width: 30px; height: 30px; line-height: 30px;"><mat-icon
+                                                            style="font-size: 18px;">remove</mat-icon></button>
+                                                    <span class="px-2 body-bold">{{ ticketCount }}</span>
+                                                    <button mat-icon-button (click)="ticketCount = ticketCount + 1"
+                                                        style="width: 30px; height: 30px; line-height: 30px;"><mat-icon
+                                                            style="font-size: 18px;">add</mat-icon></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label caption-bold">Full Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="bookingData.customerName"
+                                            placeholder="Your Name">
+                                    </div>
                                     <div class="col-md-6">
                                         <label class="form-label caption-bold">Contact Email</label>
                                         <input type="email" class="form-control" [(ngModel)]="bookingData.customerEmail"
                                             placeholder="your@email.com">
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label caption-bold">Preffered Date</label>
-                                        <input type="date" class="form-control" [(ngModel)]="bookingData.date">
+                                    <div class="col-md-12">
+                                        <div class="coupon-section p-3 rounded-4 border border-dashed">
+                                            <label class="form-label caption-bold">Coupon Code</label>
+                                            <div class="d-flex gap-2">
+                                                <input type="text" class="form-control" [(ngModel)]="couponCode"
+                                                    placeholder="Enter code">
+                                                <button mat-flat-button class="bg-dark text-white rounded-3"
+                                                    (click)="applyCoupon()">Apply</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label caption-bold">Time Slot</label>
-                                        <select class="form-select" [(ngModel)]="bookingData.time">
-                                            <option value="10:00 AM">10:00 AM</option>
-                                            <option value="02:00 PM">02:00 PM</option>
-                                            <option value="04:00 PM">04:00 PM</option>
-                                        </select>
+                                </div>
+
+                                <div class="pricing-summary mt-4 pt-4 border-top">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="body-reg text-muted">Subtotal ({{ ticketCount }} tickets)</span>
+                                        <span class="body-med">${{ getSubtotal() }}</span>
                                     </div>
-                                    <div class="col-12">
-                                        <label class="form-label caption-bold">Special Requests</label>
-                                        <textarea class="form-control" rows="3"
-                                            [(ngModel)]="bookingData.notes"></textarea>
+                                    <div class="d-flex justify-content-between mb-2 text-success"
+                                        *ngIf="discountApplied">
+                                        <span class="body-reg">Discount (20%)</span>
+                                        <span class="body-med">-${{ getSubtotal() * 0.2 }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="h5-bold">Total Amount</span>
+                                        <span class="h4-bold text-primary">${{ getTotal() }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between p-4 border-top">
                                 <button mat-button matStepperPrevious>Back</button>
                                 <button mat-flat-button [style.backgroundColor]="primaryColor"
-                                    class="text-white px-5 rounded-3" (click)="confirmBooking()">Confirm
-                                    Booking</button>
+                                    class="text-white px-5 rounded-3" (click)="confirmBooking()">Secure Tickets</button>
                             </div>
                         </mat-step>
                     </mat-stepper>

@@ -1,0 +1,108 @@
+@import '../../../styles/palette';
+
+.request-container {
+    background: radial-gradient(circle at 0% 0%, #f1f5f9 0%, #ffffff 100%);
+
+    .signup-wizard {
+        width: 1100px;
+        min-height: 700px;
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+
+        .wizard-main {
+            flex: 1;
+            min-width: 600px;
+        }
+
+        .wizard-sidebar {
+            width: 400px;
+            border-left: 1px solid #f1f5f9;
+        }
+    }
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    overflow-y: auto;
+    max-height: 400px;
+    padding: 5px;
+}
+
+.module-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+
+    &:hover:not(.selected) {
+        border-color: #6366f1;
+        transform: translateY(-2px);
+    }
+
+    &.selected {
+        border-color: #6366f1;
+        background-color: #f5f3ff;
+        border-width: 2px !important;
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.1);
+    }
+
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+
+        mat-icon {
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
+        }
+    }
+}
+
+.alert-soft-primary {
+    background-color: #eff6ff;
+    color: #1e40af;
+}
+
+.form-control,
+.form-select {
+    border: 1px solid #e2e8f0;
+
+    &:focus {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

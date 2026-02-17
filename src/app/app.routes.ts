@@ -13,11 +13,18 @@ import { DocumentsComponent } from './pages/documents/documents.component';
 import { BookingsComponent } from './pages/bookings/bookings.component';
 import { CrmComponent } from './pages/crm/crm.component';
 import { CustomerPortalComponent } from './pages/customer-portal/customer-portal.component';
+import { RequestAppComponent } from './pages/request-app/request-app.component';
+import { UamComponent } from './modules/uam/uam.component';
+import { EventsComponent } from './modules/events/events.component';
+
+
 
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'request-app', pathMatch: 'full' },
+  { path: 'request-app', component: RequestAppComponent },
+
   { path: 'dashboard', component: DashboardComponent },
   { path: 'inventory', component: InventoryComponent },
   { path: 'cases', component: CasesComponent },
@@ -28,10 +35,13 @@ export const routes: Routes = [
   { path: 'settings', component: SiteConfigComponent },
   { path: 'reports', component: ReportsComponent },
   { path: 'crm', component: CrmComponent },
+  { path: 'uam', component: UamComponent },
+
 
   { path: 'bookings', component: BookingsComponent },
   { path: 'documents', component: DocumentsComponent },
   { path: 'modules', component: ModulesComponent },
+  { path: 'events', component: EventsComponent },
   { path: 'portal-preview', component: CustomerPortalComponent },
 
 ];

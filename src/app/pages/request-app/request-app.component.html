@@ -1,0 +1,116 @@
+<div class="request-container d-flex flex-column min-vh-100">
+    <!-- Nav -->
+    <nav class="navbar px-5 py-4 bg-transparent position-absolute w-100">
+        <div class="d-flex align-items-center">
+            <img src="assets/logo.svg" height="42" class="me-2" alt="Toucan logo">
+            <span class="h4-bold text-dark mb-0">Toucan <span class="text-primary">Cloud</span></span>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center p-4 pt-5 mt-5">
+        <div class="signup-wizard bg-white rounded-5 shadow-lg overflow-hidden d-flex">
+
+            <!-- Left: Wizard Content -->
+            <div class="wizard-main p-5 d-flex flex-column justify-content-between" [ngClass]="{'w-100': step === 3}">
+
+                <div *ngIf="step === 1" class="animate-fade-in">
+                    <h2 class="display-6 fw-bold text-dark mb-2">Build your business suite</h2>
+                    <p class="h6 text-muted mb-5">Select the modules you need. No hidden fees, only pay for what you
+                        use.</p>
+
+                    <div class="module-grid">
+                        <div *ngFor="let m of modules"
+                            class="module-card p-3 rounded-4 border clickable transition position-relative"
+                            [class.selected]="m.selected" (click)="m.selected = !m.selected">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="icon-box rounded-3 d-flex align-items-center justify-content-center"
+                                    [class.bg-primary]="m.selected" [class.text-white]="m.selected">
+                                    <mat-icon>{{ m.icon }}</mat-icon>
+                                </div>
+                                <div>
+                                    <div class="body-bold mb-1">{{ m.name }}</div>
+                                    <div class="caption-reg text-muted lh-sm">{{ m.description }}</div>
+                                </div>
+                            </div>
+                            <div class="price-tag caption-bold position-absolute bottom-0 end-0 p-3"
+                                [class.text-primary]="m.selected">
+                                {{ m.price === 0 ? 'FREE' : '$' + m.price + '/mo' }}
+                            </div>
+                            <div class="selected-check position-absolute top-0 end-0 p-2" *ngIf="m.selected">
+                                <mat-icon class="text-primary" style="font-size: 20px;">check_circle</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="step === 2" class="animate-fade-in">
+                    <h2 class="display-6 fw-bold text-dark mb-2">Tell us about your brand</h2>
+                    <p class="h6 text-muted mb-5">We'll use this to provision your dedicated white-labeled environment.
+                    </p>
+
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label class="form-label caption-bold">Business / Brand Name</label>
+                            <input type="text" class="form-control rounded-3 py-3" [(ngModel)]="formData.businessName"
+                                placeholder="e.g. MediaOne Global">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label caption-bold">Industry Vertical</label>
+                            <select class="form-select rounded-3 py-3" [(ngModel)]="formData.industry">
+                                <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label caption-bold">Work Email</label>
+                            <input type="email" class="form-control rounded-3 py-3" [(ngModel)]="formData.email"
+                                placeholder="admin@myfirm.com">
+                        </div>
+                        <div class="col-md-12 text-center mt-5">
+                            <div class="alert alert-soft-primary rounded-4 p-4 border-0">
+                                <mat-icon class="text-primary mb-2">auto_awesome</mat-icon>
+                                <div class="body-bold">Ready to Provision</div>
+                                <div class="caption-reg text-muted">You have selected <b>{{ selectedModulesCount }}
+                                        modules</b> for the <b>{{ formData.industry }}</b> preset.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-4 border-top">
+                    <button mat-button class="rounded-pill px-4" *ngIf="step > 1" (click)="prevStep()">Back</button>
+                    <div *ngIf="step === 1"></div>
+                    <button mat-flat-button color="primary" class="rounded-pill px-5 py-2"
+                        (click)="step === 1 ? nextStep() : submitRequest()">
+                        {{ step === 1 ? 'Configure Brand' : 'Provision My Platform' }}
+                        <mat-icon class="ms-2">chevron_right</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Pricing Sidebar (Step 1 & 2 only) -->
+            <div class="wizard-sidebar p-5 bg-light" *ngIf="step < 3">
+                <h4 class="title2-bold mb-4">Plan Summary</h4>
+                <div class="selected-list mb-4">
+                    <div *ngFor="let m of selectedModules" class="d-flex justify-content-between mb-3 animate-slide-in">
+                        <span class="body-reg text-muted">{{ m.name }}</span>
+                        <span class="body-bold text-dark">{{ m.price === 0 ? '$0' : '$' + m.price }}</span>
+                    </div>
+                </div>
+                <div class="total-section pt-4 border-top">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="h5-bold">Total Monthly</span>
+                        <span class="h3-bold text-primary">${{ getTotalMonthly() }}</span>
+                    </div>
+                    <p class="caption-reg text-muted">Annual billing includes 2 months free.</p>
+                </div>
+
+                <div class="mt-5 text-center">
+                    <img src="assets/dashboard_mock.png" class="img-fluid rounded-4 shadow-sm opacity-50"
+                        style="transform: perspective(1000px) rotateY(-5deg);">
+                    <div class="caption-bold text-muted mt-3">PREVIEW: Your App Dashboard</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

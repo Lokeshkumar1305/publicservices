@@ -12,8 +12,8 @@ interface Module {
     category: string;
     description: string;
     icon: string;
-    active: boolean;
-    enabled: boolean;
+    status: 'enabled' | 'pro' | 'disabled';
+    price?: number;
 }
 
 @Component({
@@ -25,147 +25,26 @@ interface Module {
 })
 export class ModulesComponent implements OnInit {
     categories = [
-        { label: 'All (14)', value: 'all' },
-        { label: 'Core', value: 'core' },
-        { label: 'Billing', value: 'billing' },
-        { label: 'Operations', value: 'operations' },
-        { label: 'Analytics', value: 'analytics' },
-        { label: 'Communication', value: 'communication' },
-        { label: 'Automation', value: 'automation' },
-        { label: 'Security', value: 'security' },
-        { label: 'Branding', value: 'branding' },
-        { label: 'Developer', value: 'developer' }
+        { label: 'All Modules', value: 'all' },
+        { label: 'Customer Ops', value: 'customer' },
+        { label: 'Financials', value: 'finance' },
+        { label: 'Infrastructure', value: 'infra' },
+        { label: 'Growth', value: 'growth' }
     ];
 
     selectedCategory = 'all';
 
     allModules: Module[] = [
-        {
-            id: 'crm',
-            name: 'CRM',
-            category: 'Core',
-            description: 'Client relationship management, contact tracking, and communication history',
-            icon: 'account_circle',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'case-mgmt',
-            name: 'Case Management',
-            category: 'Core',
-            description: 'Track cases, tickets, legal matters with full lifecycle management',
-            icon: 'business_center',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'service-catalog',
-            name: 'Service Catalog',
-            category: 'Core',
-            description: 'Define services with pricing, duration, and public rate charts',
-            icon: 'widgets',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'booking-engine',
-            name: 'Booking Engine',
-            category: 'Core',
-            description: 'Calendar-based appointment booking with availability management',
-            icon: 'event',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'invoicing',
-            name: 'Invoicing',
-            category: 'Billing',
-            description: 'Create, send, and track invoices with line items and tax support',
-            icon: 'account_balance_wallet',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'payment-gateway',
-            name: 'Payment Gateway',
-            category: 'Billing',
-            description: 'Accept online payments with auto-reconciliation',
-            icon: 'vignette',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'doc-vault',
-            name: 'Document Vault',
-            category: 'Operations',
-            description: 'Store, organize, and manage contracts, proposals, and files',
-            icon: 'folder',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'reports-analytics',
-            name: 'Reports & Analytics',
-            category: 'Analytics',
-            description: 'Business insights, revenue tracking, and performance dashboards',
-            icon: 'bar_chart',
-            active: true,
-            enabled: true
-        },
-        {
-            id: 'notifications',
-            name: 'Notifications',
-            category: 'Communication',
-            description: 'Email, SMS, and WhatsApp notification management',
-            icon: 'notifications',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'workflow-engine',
-            name: 'Workflow Engine',
-            category: 'Automation',
-            description: 'Automate repetitive tasks and approval processes',
-            icon: 'account_tree',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'access-control',
-            name: 'Access Control',
-            category: 'Security',
-            description: 'Granular permissions and role-based access security',
-            icon: 'security',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'reconciliation',
-            name: 'Reconciliation',
-            category: 'Billing',
-            description: 'Multi-source payment and data reconciliation',
-            icon: 'library_add_check',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'white-label',
-            name: 'White Label',
-            category: 'Branding',
-            description: 'Custom branding, colors, logo, and domain configuration',
-            icon: 'public',
-            active: false,
-            enabled: false
-        },
-        {
-            id: 'api-access',
-            name: 'API Access',
-            category: 'Developer',
-            description: 'REST API access for external integrations',
-            icon: 'bolt',
-            active: false,
-            enabled: false
-        }
+        { id: 'crm', name: 'CRM Hub', category: 'customer', description: 'Centralized client lifecycle and relationship management.', icon: 'people', status: 'enabled' },
+        { id: 'events', name: 'Event Booking', category: 'customer', description: 'Public booking portals for media, law, and healthcare events.', icon: 'event', status: 'enabled' },
+        { id: 'payments', name: 'Payments Gateway', category: 'finance', description: 'Stripe, PayPal, and Razorpay integrated checkout engine.', icon: 'payments', status: 'enabled' },
+        { id: 'recon', name: 'Auto Reconciliation', category: 'finance', description: 'AI-driven bank statement matching and financial audits.', icon: 'sync', status: 'enabled' },
+        { id: 'reports', name: 'BI Reports', category: 'infra', description: 'Real-time business intelligence and data visualization.', icon: 'bar_chart', status: 'enabled' },
+        { id: 'nms', name: 'NMS (Messenger)', category: 'infra', description: 'Unified notification management for email, SMS, and WhatsApp.', icon: 'notifications', status: 'enabled' },
+        { id: 'dms', name: 'DMS (Vault)', category: 'infra', description: 'Secure document management with OCR and e-signature.', icon: 'folder', status: 'enabled' },
+        { id: 'uam', name: 'Identity & UAM', category: 'infra', description: 'RBAC, user identities, and platform access control.', icon: 'admin_panel_settings', status: 'enabled' },
+        { id: 'white-label', name: 'White Labeling', category: 'growth', description: 'Fully branded client portals with custom styling.', icon: 'palette', status: 'pro', price: 99 },
+        { id: 'api-hub', name: 'API Hub', category: 'growth', description: 'Developer-first REST APIs for external custom integrations.', icon: 'bolt', status: 'pro', price: 149 }
     ];
 
     filteredModules: Module[] = [];
@@ -179,7 +58,7 @@ export class ModulesComponent implements OnInit {
             this.filteredModules = this.allModules;
         } else {
             this.filteredModules = this.allModules.filter(
-                m => m.category.toLowerCase() === this.selectedCategory.toLowerCase()
+                m => m.category === this.selectedCategory
             );
         }
     }
@@ -189,8 +68,7 @@ export class ModulesComponent implements OnInit {
         this.filterModules();
     }
 
-    toggleModule(module: Module) {
-        console.log(`Module ${module.name} is now ${module.enabled ? 'enabled' : 'disabled'}`);
-        module.active = module.enabled;
+    upgradeModule(module: Module) {
+        alert(`UPGRADE: Contact sales to enable ${module.name} PRO for $${module.price}/mo.`);
     }
 }

@@ -85,6 +85,19 @@
                 <option *ngFor="let ind of industries" [value]="ind">{{ ind }}</option>
               </select>
             </div>
+            <div class="col-md-6">
+              <label class="form-label caption-bold text-dark">Dedicated Subdomain *</label>
+              <div class="input-group">
+                <input type="text" class="form-control rounded-start-3" [(ngModel)]="newFirm.subdomain"
+                  placeholder="media-group">
+                <span class="input-group-text rounded-end-3">.toucan.ai</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label caption-bold text-dark">Custom Production URL</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="newFirm.customDomain"
+                placeholder="portal.mediagroup.com">
+            </div>
             <div class="col-md-12">
               <label class="form-label caption-bold text-dark">Primary Brand Color</label>
               <div class="d-flex gap-3 align-items-center">

@@ -1,0 +1,135 @@
+<div class="uam-screen p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2-bold text-dark mb-1">User Access Management</h1>
+            <p class="body-reg text-muted mb-0">Manage identity, roles, and granular permissions across your suite.</p>
+        </div>
+        <button mat-flat-button color="primary" class="rounded-3 px-4 shadow-sm">
+            <mat-icon class="me-1">person_add</mat-icon> Invite User
+        </button>
+    </div>
+
+    <mat-card class="border-0 shadow-sm rounded-4 overflow-hidden">
+        <mat-tab-group animationDuration="200ms" class="custom-tabs">
+
+            <!-- Users List -->
+            <mat-tab>
+                <ng-template matTabLabel>
+                    <div class="d-flex align-items-center gap-2 px-2">
+                        <mat-icon style="font-size: 20px;">people</mat-icon>
+                        <span class="body-med">Active Users</span>
+                    </div>
+                </ng-template>
+
+                <div class="p-0">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="ps-4">User</th>
+                                <th>Access Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users" class="align-middle">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center gap-3 py-2">
+                                        <div
+                                            class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+                                            {{ user.name.charAt(0) }}
+                                        </div>
+                                        <div>
+                                            <div class="body-bold text-dark">{{ user.name }}</div>
+                                            <div class="caption-reg text-muted">{{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="role-badge">{{ user.role }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge status-badge" [ngClass]="user.status">{{ user.status }}</span>
+                                </td>
+                                <td class="body-reg text-muted">{{ user.lastLogin }}</td>
+                                <td class="text-end pe-4">
+                                    <button mat-icon-button class="text-muted"><mat-icon>edit</mat-icon></button>
+                                    <button mat-icon-button class="text-muted"><mat-icon>more_vert</mat-icon></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab>
+
+            <!-- Roles & Permissions -->
+            <mat-tab>
+                <ng-template matTabLabel>
+                    <div class="d-flex align-items-center gap-2 px-2">
+                        <mat-icon style="font-size: 20px;">security</mat-icon>
+                        <span class="body-med">Roles & Permissions</span>
+                    </div>
+                </ng-template>
+
+                <div class="p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4 border-end">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="title2-bold mb-0">Roles</h3>
+                                <button mat-button color="primary"><mat-icon>add</mat-icon> New</button>
+                            </div>
+                            <div class="roles-list d-flex flex-column gap-2">
+                                <div *ngFor="let role of roles"
+                                    class="role-card p-3 rounded-3 border clickable d-flex justify-content-between align-items-center transition">
+                                    <div>
+                                        <div class="body-bold">{{ role.name }}</div>
+                                        <div class="caption-reg text-muted">{{ role.userCount }} assigned</div>
+                                    </div>
+                                    <mat-icon class="text-muted" style="font-size: 18px;">chevron_right</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3 class="title2-bold mb-0">Permission Matrix: Super Admin</h3>
+                                <span class="caption-bold text-success bg-success-light px-2 py-1 rounded">Preset
+                                    Role</span>
+                            </div>
+
+                            <table class="table border rounded-3">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Module</th>
+                                        <th class="text-center">View</th>
+                                        <th class="text-center">Edit</th>
+                                        <th class="text-center">Delete</th>
+                                        <th class="text-center">Export</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let p of permissions" class="align-middle">
+                                        <td class="body-bold">{{ p.module }}</td>
+                                        <td class="text-center"><mat-icon class="text-success">check_circle</mat-icon>
+                                        </td>
+                                        <td class="text-center"><mat-icon class="text-success">check_circle</mat-icon>
+                                        </td>
+                                        <td class="text-center"><mat-icon [class.text-success]="p.delete"
+                                                [class.text-muted]="!p.delete">{{ p.delete ? 'check_circle' : 'cancel'
+                                                }}</mat-icon></td>
+                                        <td class="text-center"><mat-icon class="text-success">check_circle</mat-icon>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button mat-flat-button color="primary" class="rounded-3 px-4">Save Matrix</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card>
+</div>

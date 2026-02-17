@@ -24,18 +24,24 @@ export class CustomerPortalComponent implements OnInit {
     // Simulated White Label Data
     firmName: string = 'Toucan Media Group'; // Derived from onboarding
     primaryColor: string = '#6366f1';
-    services = [
-        { id: 1, name: 'Professional Video Shoot', price: '$500', icon: 'videocam', category: 'Media' },
-        { id: 2, name: 'Social Media Management', price: '$200/mo', icon: 'share', category: 'Marketing' },
-        { id: 3, name: 'Brand Identity Design', price: '$1200', icon: 'auto_fix_high', category: 'Design' },
-        { id: 4, name: 'SEO Consultation', price: '$150/hr', icon: 'trending_up', category: 'SEO' },
+    heroTitle: string = 'Book Your Next Production';
+    welcomeMessage: string = 'Welcome to our platform. Explore our premium media services below.';
+    events = [
+        { id: '1', name: 'Midnight Jazz Sessions', type: 'Music Concert', date: 'Mar 15, 2026', price: 45, icon: 'music_note', description: 'An intimate evening of live jazz at the Toucan Lounge.' },
+        { id: '2', name: 'Golden Hour Photography', type: 'Workshop', date: 'Apr 05, 2026', price: 150, icon: 'camera_alt', description: 'Master outdoor lighting with our professional media team.' },
+        { id: '3', name: 'Product Launch: X-Series', type: 'Corporate', date: 'May 10, 2026', price: 0, icon: 'rocket_launch', description: 'Be the first to see the latest media production gear.' },
     ];
 
-    selectedService: any = null;
+    selectedEvent: any = null;
+    ticketCount: number = 1;
+    couponCode: string = '';
+    discountApplied: boolean = false;
+
     bookingData = {
         date: '',
         time: '',
         customerEmail: '',
+        customerName: '',
         notes: ''
     };
 
@@ -45,14 +51,32 @@ export class CustomerPortalComponent implements OnInit {
 
     ngOnInit(): void { }
 
-    selectService(service: any) {
-        this.selectedService = service;
+    selectEvent(event: any) {
+        this.selectedEvent = event;
+    }
+
+    applyCoupon() {
+        if (this.couponCode.toUpperCase() === 'WELCOMEMEDIA') {
+            this.discountApplied = true;
+            alert('COUPON APPLIED: 20% discount activated!');
+        } else {
+            alert('INVALID CODE: Please check your coupon code again.');
+        }
+    }
+
+    getSubtotal(): number {
+        return (this.selectedEvent?.price || 0) * this.ticketCount;
+    }
+
+    getTotal(): number {
+        const subtotal = this.getSubtotal();
+        return this.discountApplied ? subtotal * 0.8 : subtotal;
     }
 
     confirmBooking() {
         this.isBookingComplete = true;
         setTimeout(() => {
-            alert(`BOOKING SUCCESSFUL! Our team at ${this.firmName} will contact you shortly regarding the ${this.selectedService.name}.`);
+            alert(`TICKETS SECURED: You have successfully booked ${this.ticketCount} ticket(s) for ${this.selectedEvent.name}. A confirmation email has been sent to ${this.bookingData.customerEmail}.`);
         }, 500);
     }
 }

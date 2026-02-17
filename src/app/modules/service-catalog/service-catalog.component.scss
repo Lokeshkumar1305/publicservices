@@ -1,172 +1,154 @@
 @import '../../../styles/palette';
 
-.service-catalog-screen {
-  background-color: #fcfdfe;
+.service-catalog-container {
+  background-color: #f9fbfd;
   min-height: 100vh;
 }
 
-.search-box {
-  width: 250px;
+.catalog-header {
+  margin-bottom: 2rem;
+}
 
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    font-size: 18px;
-    height: 18px;
-    width: 18px;
-  }
-
-  input {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0 !important;
-    font-size: 13px;
-
-    &:focus {
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-      border-color: #6366f1 !important;
-    }
-  }
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
 }
 
 .service-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent !important;
+  background: #ffffff;
+  border: 1px solid #edf2f7 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+  cursor: pointer;
+  height: 100%;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1) !important;
-    border-color: #eef2ff !important;
-
-    .card-actions {
-      opacity: 1;
-    }
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
 
-  .service-icon-bg {
-    width: 42px;
-    height: 42px;
-    background-color: #f0f4ff;
-    border-radius: 12px;
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .card-actions {
-    opacity: 0;
-    transition: opacity 0.2s ease;
+  .card-content {
+    padding: 2rem;
     display: flex;
-    gap: 4px;
+    flex-column: column;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  .icon-wrapper {
+    margin-bottom: 1.5rem;
+
+    .service-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+    }
+
+    &.inventory mat-icon {
+      color: #f56565;
+    }
+
+    // Reddish for Inventory
+    &.sign mat-icon {
+      color: #4299e1;
+    }
+
+    // Blue for Sign
+    &.billing mat-icon {
+      color: #48bb78;
+    }
+
+    // Green for Billing
+    &.crm mat-icon {
+      color: #ed64a6;
+    }
+
+    // Pink for CRM
+    &.data mat-icon {
+      color: #805ad5;
+    }
+
+    // Purple for Data
+    &.infra mat-icon {
+      color: #ecc94b;
+    }
+
+    // Yellow for Infra
+  }
+
+  .service-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
   }
 
   .service-desc {
-    font-size: 13px;
+    font-size: 0.95rem;
+    color: #718096;
     line-height: 1.6;
-    color: #475569;
-    height: 60px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
   }
 
-  .text-indigo {
-    color: #6366f1;
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
   }
 
-  .discount-badge {
-    background-color: #fff1f2;
-    color: #e11d48;
-    font-size: 10px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    width: fit-content;
+  .service-price {
+    .amount {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
+
+    .period {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      margin-left: 0.25rem;
+    }
   }
 
-  .service-visibility-icon {
-    color: #94a3b8;
+  .try-now-btn {
+    color: #3182ce;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    padding: 0;
 
-    &.active {
-      color: #10b981;
+    &:hover {
+      color: #2b6cb0;
     }
   }
 }
 
-// Modal Styles
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-  z-index: 9999;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 
-.modal-container {
-  width: 600px;
-  max-width: 95vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: modal-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes modal-slide-up {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.form-control,
-.form-select {
-  border: 1px solid #e2e8f0 !important;
-  font-size: 13px;
-
-  &:focus {
-    border-color: #6366f1 !important;
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
-  }
-}
-
-textarea {
-  resize: none;
-}
-
-.btn-sm {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease forwards;
-  opacity: 0;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.modal-card {
+  width: 100%;
+  max-width: 600px;
 }

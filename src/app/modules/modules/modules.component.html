@@ -1,44 +1,64 @@
 <div class="modules-screen p-4">
     <!-- Header -->
-    <div class="mb-4">
-        <h1 class="h2-bold text-dark mb-1">Modules</h1>
-        <p class="body-reg text-muted mb-0">Enable or disable plug & play modules for your workspace</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2-bold text-dark mb-1">App Marketplace</h1>
+            <p class="body-reg text-muted mb-0">Expand your platform capabilities with pre-built white-label modules.
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <button mat-stroked-button class="rounded-3 border-light shadow-sm">
+                <mat-icon class="me-1">history</mat-icon> Deployment Logs
+            </button>
+            <button mat-flat-button color="primary" class="rounded-3 px-4 shadow-sm">
+                <mat-icon class="me-1">cloud_download</mat-icon> Update All
+            </button>
+        </div>
     </div>
 
-    <!-- Filter Tabs -->
-    <div class="tabs-nav d-flex flex-wrap gap-2 mb-4">
-        <button mat-button *ngFor="let cat of categories" class="tab-btn rounded-pill px-3 py-1"
-            [class.active]="selectedCategory === cat.value" (click)="selectCategory(cat.value)">
+    <!-- Category Filter Bar -->
+    <div class="filter-bar bg-white border rounded-4 p-2 mb-4 d-flex gap-2 shadow-sm overflow-auto no-scrollbar">
+        <button *ngFor="let cat of categories" class="btn border-0 rounded-3 px-4 py-2 text-nowrap transition"
+            [class.btn-primary]="selectedCategory === cat.value" [class.text-muted]="selectedCategory !== cat.value"
+            (click)="selectCategory(cat.value)">
             {{ cat.label }}
         </button>
     </div>
 
     <!-- Modules Grid -->
     <div class="row g-4">
-        <div class="col-xl-4 col-md-6" *ngFor="let mod of filteredModules">
-            <mat-card class="module-card border-0 shadow-sm p-4 h-100 rounded-4">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="icon-box rounded-3 d-flex align-items-center justify-content-center"
-                            [ngClass]="'bg-' + mod.category.toLowerCase() + '-subtle'">
-                            <mat-icon [ngClass]="'text-' + mod.category.toLowerCase()">{{ mod.icon }}</mat-icon>
+        <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let mod of filteredModules">
+            <mat-card class="module-card border-0 shadow-sm rounded-4 h-100 overflow-hidden transition">
+                <div class="p-4 d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div class="icon-circle d-flex align-items-center justify-content-center rounded-4 shadow-sm"
+                            [class.bg-primary]="mod.status === 'enabled'" [class.text-white]="mod.status === 'enabled'"
+                            [class.bg-light]="mod.status !== 'enabled'">
+                            <mat-icon>{{ mod.icon }}</mat-icon>
                         </div>
-                        <div class="d-flex flex-column">
-                            <span class="body-bold text-dark">{{ mod.name }}</span>
-                            <span class="badge category-badge fit-content px-2 py-0 mt-1">{{ mod.category }}</span>
-                        </div>
+                        <span class="badge" [ngClass]="mod.status">
+                            {{ mod.status === 'pro' ? 'PRO' : mod.status }}
+                        </span>
                     </div>
-                    <mat-slide-toggle [(ngModel)]="mod.enabled" (change)="toggleModule(mod)"
-                        color="primary"></mat-slide-toggle>
-                </div>
 
-                <p class="caption-reg text-muted mb-4 description-text">
-                    {{ mod.description }}
-                </p>
+                    <h3 class="title2-bold text-dark mb-2">{{ mod.name }}</h3>
+                    <p class="caption-reg text-muted mb-4 flex-grow-1">{{ mod.description }}</p>
 
-                <div class="mt-auto d-flex align-items-center text-success" *ngIf="mod.active">
-                    <mat-icon style="font-size: 14px; width: 14px; height: 14px" class="me-1">bolt</mat-icon>
-                    <span class="caption-bold">Active</span>
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <div *ngIf="mod.status === 'enabled'" class="d-flex align-items-center text-success gap-1">
+                            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">check_circle</mat-icon>
+                            <span class="caption-bold">Running</span>
+                        </div>
+                        <div *ngIf="mod.status === 'pro'" class="h5-bold mb-0 text-primary">${{ mod.price }}<small
+                                class="caption-reg text-muted">/mo</small></div>
+                        <div *ngIf="mod.status === 'disabled'" class="caption-bold text-muted">Available</div>
+
+                        <button mat-button class="rounded-pill" *ngIf="mod.status === 'enabled'">Settings</button>
+                        <button mat-flat-button color="primary" class="rounded-pill px-4" *ngIf="mod.status === 'pro'"
+                            (click)="upgradeModule(mod)">Upgrade</button>
+                        <button mat-flat-button class="rounded-pill px-4 bg-light text-dark"
+                            *ngIf="mod.status === 'disabled'">Enable</button>
+                    </div>
                 </div>
             </mat-card>
         </div>

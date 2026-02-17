@@ -66,6 +66,7 @@ export class OnboardingComponent implements OnInit {
     industry: 'Law Firm',
     email: '',
     subdomain: '',
+    customDomain: '',
     primaryColor: '#6366f1',
     logo: ''
   };
@@ -112,7 +113,7 @@ export class OnboardingComponent implements OnInit {
     alert(`PROVISIONING STARTED: ${this.newFirm.name} environment is being built with ${freshRequest.modules.length} modules.`);
 
     // Reset wizard
-    this.newFirm = { name: '', industry: 'Law Firm', email: '', subdomain: '', primaryColor: '#6366f1', logo: '' };
+    this.newFirm = { name: '', industry: 'Law Firm', email: '', subdomain: '', customDomain: '', primaryColor: '#6366f1', logo: '' };
     this.availableModules.forEach(m => m.selected = (m.id === 'crm' || m.id === 'cases'));
   }
 }

@@ -14,6 +14,7 @@ export interface ServiceItem {
   name: string;
   category: string;
   description: string;
+  icon: string;
   price: number;
   type: 'Fixed' | 'Hourly';
   duration: string;
@@ -43,9 +44,10 @@ export class ServiceCatalogComponent implements OnInit {
   services: ServiceItem[] = [
     {
       id: 'SVC-001',
-      name: 'Legal Consultation',
-      category: 'Consultation',
-      description: 'Initial consultation to assess your legal needs and provide strategic advice',
+      name: 'Inventory',
+      category: 'Management',
+      icon: 'shopping_cart_checkout',
+      description: 'Powerful stock management and inventory control software.',
       price: 200,
       type: 'Fixed',
       duration: '60m',
@@ -54,20 +56,22 @@ export class ServiceCatalogComponent implements OnInit {
     },
     {
       id: 'SVC-002',
-      name: 'Contract Drafting',
+      name: 'Sign',
       category: 'Documentation',
-      description: 'Professional contract drafting and review by experienced attorneys',
+      icon: 'history_edu',
+      description: 'Digital signature app for businesses.',
       price: 150,
-      type: 'Hourly',
+      type: 'Fixed',
       duration: '120m',
       active: true,
       public: true
     },
     {
       id: 'SVC-003',
-      name: 'Legal Notice',
-      category: 'Litigation',
-      description: 'Drafting and serving of legal notices',
+      name: 'Billing',
+      category: 'Finance',
+      icon: 'payments',
+      description: 'End-to-end billing solution for your business.',
       price: 300,
       type: 'Fixed',
       duration: '90m',
@@ -76,32 +80,34 @@ export class ServiceCatalogComponent implements OnInit {
     },
     {
       id: 'SVC-004',
-      name: 'Business Formation',
-      category: 'Corporate',
-      description: 'LLC, Corporation, or Partnership formation with full documentation',
+      name: 'CRM Hub',
+      category: 'Sales',
+      icon: 'groups',
+      description: 'Complete customer relationship management platform.',
       price: 1500,
       type: 'Fixed',
       duration: '180m',
-      discount: '10% OFF',
       active: true,
       public: true
     },
     {
       id: 'SVC-005',
-      name: 'IP Registration',
-      category: 'IP Law',
-      description: 'Trademark and patent registration services',
+      name: 'Analytics',
+      category: 'Data',
+      icon: 'bar_chart',
+      description: 'Real-time business intelligence and data visualization.',
       price: 250,
-      type: 'Hourly',
+      type: 'Fixed',
       duration: '60m',
       active: true,
       public: true
     },
     {
       id: 'SVC-006',
-      name: 'Estate Planning',
-      category: 'Estate',
-      description: 'Comprehensive estate planning including wills, trusts, and power of attorney',
+      name: 'Security Vault',
+      category: 'Infrastructure',
+      icon: 'security',
+      description: 'Secure document storage with enterprise-grade encryption.',
       price: 2000,
       type: 'Fixed',
       duration: '240m',
@@ -115,16 +121,15 @@ export class ServiceCatalogComponent implements OnInit {
     name: '',
     price: 0,
     type: 'Fixed',
-    category: '',
+    category: 'Consultation',
     duration: 60,
-    taxRate: 0,
-    discount: 0,
+    icon: 'star',
     description: '',
     public: true,
     active: true
   };
 
-  categories = ['Consultation', 'Documentation', 'Litigation', 'Corporate', 'IP Law', 'Estate'];
+  categories = ['Consultation', 'Documentation', 'Litigation', 'Corporate', 'IP Law', 'Estate', 'Management', 'Finance', 'Sales', 'Data', 'Infrastructure'];
 
   ngOnInit(): void { }
 
@@ -137,6 +142,7 @@ export class ServiceCatalogComponent implements OnInit {
       id: `SVC-00${this.services.length + 1}`,
       name: this.newService.name,
       category: this.newService.category,
+      icon: this.newService.icon,
       description: this.newService.description,
       price: this.newService.price,
       type: this.newService.type,
@@ -146,7 +152,7 @@ export class ServiceCatalogComponent implements OnInit {
     });
     this.toggleAddModal();
     // Reset
-    this.newService = { name: '', price: 0, type: 'Fixed', category: '', duration: 60, taxRate: 0, discount: 0, description: '', public: true, active: true };
+    this.newService = { name: '', price: 0, type: 'Fixed', category: 'Consultation', duration: 60, icon: 'star', description: '', public: true, active: true };
   }
 
   deleteService(index: number) {
