@@ -62,6 +62,29 @@
         }
     }
 
+    .scenario2-tabs {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+        .tab-btn {
+            font-weight: 600;
+            color: #64748b;
+            padding: 12px 24px;
+            border-radius: 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+
+            &.active {
+                color: $primary-600;
+                border-bottom-color: $primary-600;
+                background: rgba($primary-500, 0.04);
+            }
+
+            &:hover:not(.active) {
+                background: rgba(0, 0, 0, 0.02);
+            }
+        }
+    }
+
     .onboarding-card {
         background: white;
         transition: all 0.3s ease;

@@ -51,6 +51,31 @@ export class MerchantOnboardingComponent {
     showKeys: boolean = false;
     secretKey: string = '';
     accessKey: string = '';
+    selectedTab: string = 'proserv';
+
+    // Business Details (Scenario 2)
+    legalName: string = '';
+    incorporationCountry: string = '';
+    establishmentEmail: string = '';
+    pincode: string = '';
+    state: string = '';
+    city: string = '';
+    panNumber: string = '';
+    gstNumber: string = '';
+
+    // Personal Details (Scenario 2)
+    applicantFirstName: string = '';
+    applicantLastName: string = '';
+    applicantEmail: string = '';
+    applicantMobile: string = '';
+    ownerGender: string = '';
+    ownerDOB: string = '';
+
+    // Bank Details (Scenario 2)
+    bankAccountName: string = '';
+    bankAccountNumber: string = '';
+    bankBranchCode: string = '';
+    bankSettlementCurrency: string = '';
 
     // Options
     tenantTypes = ['INDIVIDUAL', 'FIRM', 'EVENT'];
@@ -66,14 +91,21 @@ export class MerchantOnboardingComponent {
         { id: 'ACCOUNTING', name: 'Accounting Recon' }
     ];
 
-    // Scenario 2 Payload (truncated for brevity in code, but available for logic)
+    // Scenario 2 Payload (provided by user)
     scenario2Data = {
-        messageID: "/api/application/save",
-        requestType: "UPDATE",
-        object: {
-            applicationNumber: "364297491983720179",
-            applicationStatus: "SAVED",
-            // ... rest of the complex object provided in request
+        "messageID": "/api/application/save",
+        "requestType": "UPDATE",
+        "doesInputHaveEncryptedData": true,
+        "updEncryptionIndex": "699be3d1d167d46979c5d129",
+        "updEncryptionPubVal": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkFuTWwkI11YyWlfL/HJ0sdrgzlUOorzrNEdcRDXmiDePAZW/LIGnHb+CKXgnOs0TG4gPGP6dqiJAr2PJjp6JrsVu2nqnUftKwB+zN+ZIG8iaVL8+mTFpubOWKBsjeqK1XIh5emKhwxbMTSS0CRWDkaNQV4v63a5ljDKq5eHIYldG79ezpOOaMwcx41/vu/a7oopKHbB9SZAIzhx78XMt6L6doiAPnWGVWopct/YFIZ00dwRFBR1Drr357wn3NAtS09LgbF4rWqdwK0+G1lni3AqnBONSuuYy/NtKCIU/DxAgCXMDDONmffODbb89d/yjVkpGN0oBH0t8Z3NxMYqVsQIDAQAB",
+        "object": {
+            "id": "699be3cfd167d46979c5d127",
+            "applicationNumber": "364297491983720179",
+            "applicationStatus": "SAVED",
+            "applicantName": {
+                "firstName": "Naga",
+                "lastName": "raju"
+            }
         }
     };
 
@@ -93,22 +125,67 @@ export class MerchantOnboardingComponent {
     }
 
     getPayload() {
-        return {
-            tenantId: this.tenantId,
-            businessName: this.businessName,
-            displayName: this.displayName,
-            tenantType: this.tenantType,
-            businessCategory: this.businessCategory,
-            // subscriptionPlan: this.subscriptionPlan,
-            branding: {
-                logoUrl: this.logoUrl,
-                primaryColor: this.primaryColor,
-                secondaryColor: this.secondaryColor,
-                customDomain: this.customDomain
-            },
-            enabledModules: this.selectedModules,
-            keys: this.showKeys ? { accessKey: this.accessKey, secretKey: this.secretKey } : null
-        };
+        if (this.activeScenario === 1) {
+            return {
+                tenantId: this.tenantId,
+                businessName: this.businessName,
+                displayName: this.displayName,
+                tenantType: this.tenantType,
+                businessCategory: this.businessCategory,
+                branding: {
+                    logoUrl: this.logoUrl,
+                    primaryColor: this.primaryColor,
+                    secondaryColor: this.secondaryColor,
+                    customDomain: this.customDomain
+                },
+                enabledModules: this.selectedModules,
+                keys: this.showKeys ? { accessKey: this.accessKey, secretKey: this.secretKey } : null
+            };
+        } else {
+            // Scenario 2: Complex Payload based on User Provided Structure
+            return {
+                ...this.scenario2Data,
+                object: {
+                    ...this.scenario2Data.object,
+                    applicantName: {
+                        firstName: this.applicantFirstName,
+                        lastName: this.applicantLastName
+                    },
+                    applicantEmailId: this.applicantEmail,
+                    mobileNumber: {
+                        countryCode: "+91",
+                        number: this.applicantMobile
+                    },
+                    establishmentDetails: {
+                        legalName: this.legalName,
+                        countryOfIncorporation: this.incorporationCountry,
+                        establishmentEmailId: this.establishmentEmail,
+                        establishmentAddress: {
+                            city: this.city,
+                            state: this.state,
+                            pincode: this.pincode,
+                            country: "India",
+                            isoCountryCode: "IND",
+                            countryCodeNumeric: "356"
+                        }
+                    },
+                    firstOwnerList: {
+                        ownerName: {
+                            firstName: this.applicantFirstName,
+                            lastName: this.applicantLastName
+                        },
+                        emailId: this.applicantEmail,
+                        gender: this.ownerGender,
+                        dateOfBirth: this.ownerDOB
+                    },
+                    debitAccountDetails: {
+                        accountname: { firstName: this.bankAccountName },
+                        accountNumber: this.bankAccountNumber,
+                        branchCode: this.bankBranchCode
+                    }
+                }
+            };
+        }
     }
 
     onOnboardAsClient() {

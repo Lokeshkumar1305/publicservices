@@ -27,6 +27,8 @@
                     <h3 class="title1-bold m-0">ProServ Fields</h3>
                 </div>
 
+                <!-- Scenario 1 Content -->
+                @if (activeScenario === 1) {
                 <div class="row g-4">
                     <!-- Business Name -->
                     <div class="col-md-6">
@@ -69,18 +71,6 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-
-                    <!-- Subscription Plan -->
-                    <!-- <div class="col-md-4">
-                        <label class="form-label-custom">Subscription Plan</label>
-                        <mat-form-field appearance="outline" class="w-100 no-subscript">
-                            <mat-select [(ngModel)]="subscriptionPlan">
-                                @for (plan of subscriptionPlans; track plan) {
-                                <mat-option [value]="plan">{{plan}}</mat-option>
-                                }
-                            </mat-select>
-                        </mat-form-field>
-                    </div> -->
 
                     <!-- Branding Section -->
                     <div class="col-12">
@@ -158,7 +148,7 @@
                 </div>
 
                 <!-- Scenario 1 Buttons -->
-                @if (activeScenario === 1 && !isSaved) {
+                @if (!isSaved) {
                 <div class="d-flex gap-3 mt-5">
                     <button class="ps-btn ps-btn-primary w-100 py-3" (click)="onSave()">
                         <mat-icon>save</mat-icon>
@@ -166,9 +156,193 @@
                     </button>
                 </div>
                 }
+                }
 
-                <!-- Scenario 2 Submit Button -->
+                <!-- Scenario 2 Tabbed Interface -->
                 @if (activeScenario === 2) {
+                <div class="scenario2-tabs d-flex gap-3 mb-4 overflow-auto pb-2">
+                    <button mat-button class="tab-btn" [class.active]="selectedTab === 'proserv'"
+                        (click)="selectedTab = 'proserv'">ProServ Information</button>
+                    <button mat-button class="tab-btn" [class.active]="selectedTab === 'business'"
+                        (click)="selectedTab = 'business'">Business Details</button>
+                    <button mat-button class="tab-btn" [class.active]="selectedTab === 'personal'"
+                        (click)="selectedTab = 'personal'">Personal Details</button>
+                    <button mat-button class="tab-btn" [class.active]="selectedTab === 'bank'"
+                        (click)="selectedTab = 'bank'">Bank Details</button>
+                </div>
+
+                <!-- Tab Content: ProServ Information (Same as Scenario 1 fields) -->
+                @if (selectedTab === 'proserv') {
+                <div class="row g-4 animate__animated animate__fadeIn">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Business Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="businessName" placeholder="e.g. Acme Corp">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Display Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="displayName" placeholder="e.g. Acme Services">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Tenant Type</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="tenantType" placeholder="Select Type">
+                                @for (type of tenantTypes; track type) {
+                                <mat-option [value]="type">{{type}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Business Category</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="businessCategory" placeholder="Select Category">
+                                @for (cat of businessCategories; track cat) {
+                                <mat-option [value]="cat">{{cat}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label-custom">Enabled Modules</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="selectedModules" multiple placeholder="Select Modules">
+                                @for (module of availableModules; track module.id) {
+                                <mat-option [value]="module.id">{{module.name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                }
+
+                <!-- Tab Content: Business Details -->
+                @if (selectedTab === 'business') {
+                <div class="row g-4 animate__animated animate__fadeIn">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Legal Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="legalName" placeholder="Legal Business Name">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Incorporation Country</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="incorporationCountry" placeholder="e.g. India / IND">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">PAN Number</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="panNumber" placeholder="ABCDE1234F">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">GST Number</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="gstNumber" placeholder="22AAAAA0000A1Z5">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom">City</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="city" placeholder="Enter City">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom">State</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="state" placeholder="Enter State">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Pincode</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="pincode" placeholder="400001">
+                        </mat-form-field>
+                    </div>
+                </div>
+                }
+
+                <!-- Tab Content: Personal Details -->
+                @if (selectedTab === 'personal') {
+                <div class="row g-4 animate__animated animate__fadeIn">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">First Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="applicantFirstName" placeholder="Enter first name">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Last Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="applicantLastName" placeholder="Enter last name">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Email Address</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="applicantEmail" placeholder="e.g. user@example.com">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Mobile Number</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="applicantMobile" placeholder="+91 9999999999">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Gender</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="ownerGender" placeholder="Select gender">
+                                <mat-option value="MALE">Male</mat-option>
+                                <mat-option value="FEMALE">Female</mat-option>
+                                <mat-option value="OTHER">Other</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Date of Birth</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput type="date" [(ngModel)]="ownerDOB">
+                        </mat-form-field>
+                    </div>
+                </div>
+                }
+
+                <!-- Tab Content: Bank Details -->
+                @if (selectedTab === 'bank') {
+                <div class="row g-4 animate__animated animate__fadeIn">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Account Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="bankAccountName" placeholder="Exact name as in bank">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Account Number</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="bankAccountNumber" placeholder="Enter bank account number">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Branch Code / IFSC</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="bankBranchCode" placeholder="SBIN000XXXX">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Currency</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="bankSettlementCurrency" placeholder="INR / USD">
+                        </mat-form-field>
+                    </div>
+                </div>
+                }
+
                 <div class="d-flex gap-3 mt-5">
                     <button class="ps-btn ps-btn-primary w-100 py-3" (click)="onSubmit()">
                         <mat-icon>send</mat-icon>
