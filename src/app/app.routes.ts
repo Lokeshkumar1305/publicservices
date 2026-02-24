@@ -18,7 +18,7 @@ import { UamComponent } from './modules/uam/uam.component';
 import { EventsComponent } from './modules/events/events.component';
 
 
-
+import { MerchantOnboardingComponent } from './modules/merchant-onboarding/merchant-onboarding.component';
 
 
 export const routes: Routes = [
@@ -31,6 +31,7 @@ export const routes: Routes = [
   { path: 'reconciliation', component: ReconciliationComponent },
   { path: 'invoices', component: BillingComponent },
   { path: 'onboarding-kyb', component: OnboardingComponent },
+  { path: 'merchant-onboarding', component: MerchantOnboardingComponent },
   { path: 'services', component: ServiceCatalogComponent },
   { path: 'settings', component: SiteConfigComponent },
   { path: 'reports', component: ReportsComponent },

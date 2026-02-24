@@ -1,0 +1,243 @@
+<div class="merchant-onboarding-container p-4 animate__animated animate__fadeIn">
+    <!-- Page Header -->
+    <div class="header-section d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h2-bold text-dark mb-1">Merchant Provisioning</h2>
+            <p class="body-reg text-muted">Initialize your merchant account and secure your integration keys.</p>
+        </div>
+
+        <!-- Scenario Switcher for Demo -->
+        <div class="filter-tabs bg-light p-1 rounded-3 d-flex gap-1 shadow-sm">
+            <button mat-button class="filter-btn rounded-2" [class.active]="activeScenario === 1"
+                (click)="toggleScenario(1)">Scenario 1</button>
+            <button mat-button class="filter-btn rounded-2" [class.active]="activeScenario === 2"
+                (click)="toggleScenario(2)">Scenario 2</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Step 1: Business Profile -->
+            <mat-card class="onboarding-card border-0 shadow-sm rounded-4 p-4 mb-4"
+                [class.disabled-opacity]="activeScenario === 1 && showKeys">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-circle bg-primary-light">
+                        <mat-icon color="primary">storefront</mat-icon>
+                    </div>
+                    <h3 class="title1-bold m-0">ProServ Fields</h3>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Business Name -->
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Business Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="businessName" placeholder="e.g. Acme Corp">
+                            <mat-icon matSuffix class="text-muted">business</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Display Name -->
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Display Name</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="displayName" placeholder="e.g. Acme Services">
+                            <mat-icon matSuffix class="text-muted">badge</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Tenant Type -->
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Tenant Type</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="tenantType" placeholder="Select Tenant Type">
+                                @for (type of tenantTypes; track type) {
+                                <mat-option [value]="type">{{type}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Business Category -->
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Business Category</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="businessCategory" placeholder="Select Category">
+                                @for (cat of businessCategories; track cat) {
+                                <mat-option [value]="cat">{{cat}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Subscription Plan -->
+                    <!-- <div class="col-md-4">
+                        <label class="form-label-custom">Subscription Plan</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="subscriptionPlan">
+                                @for (plan of subscriptionPlans; track plan) {
+                                <mat-option [value]="plan">{{plan}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+
+                    <!-- Branding Section -->
+                    <div class="col-12">
+                        <hr class="my-2 opacity-10">
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="col-md-12">
+                        <label class="form-label-custom">Business Logo</label>
+                        <div
+                            class="logo-upload-container d-flex align-items-center gap-4 p-3 border rounded-3 bg-light-subtle">
+                            <div
+                                class="logo-preview-box rounded-3 border bg-white d-flex align-items-center justify-content-center overflow-hidden">
+                                @if (logoPreview) {
+                                <img [src]="logoPreview" alt="Logo" class="img-fluid">
+                                } @else {
+                                <mat-icon class="text-muted"
+                                    style="font-size: 32px; width: 32px; height: 32px;">image</mat-icon>
+                                }
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="caption-reg text-muted mb-2">Upload your business logo (PNG, JPG, Max 2MB)</p>
+                                <div class="d-flex gap-2">
+                                    <button mat-stroked-button class="rounded-3" (click)="logoInput.click()">
+                                        <mat-icon>upload</mat-icon> Select Image
+                                    </button>
+                                    <input #logoInput type="file" class="d-none" (change)="onLogoUpload($event)"
+                                        accept="image/*">
+                                    @if (logoPreview) {
+                                    <button mat-button color="warn" class="rounded-3" (click)="logoPreview = null">
+                                        Remove
+                                    </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Custom Domain</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <input matInput [(ngModel)]="customDomain" placeholder="lawfirm.com">
+                            <mat-icon matSuffix class="text-muted">language</mat-icon>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label-custom d-block">Brand Identity</label>
+                        <div class="d-flex gap-4">
+                            <div class="color-picker-wrapper d-flex align-items-center gap-2">
+                                <input type="color" [(ngModel)]="primaryColor"
+                                    class="form-control form-control-color border-0 p-1">
+                                <span class="caption-reg">Primary Color</span>
+                            </div>
+                            <div class="color-picker-wrapper d-flex align-items-center gap-2">
+                                <input type="color" [(ngModel)]="secondaryColor"
+                                    class="form-control form-control-color border-0 p-1">
+                                <span class="caption-reg">Secondary Color</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enabled Modules -->
+                    <div class="col-md-12">
+                        <label class="form-label-custom">Enabled Modules</label>
+                        <mat-form-field appearance="outline" class="w-100 no-subscript">
+                            <mat-select [(ngModel)]="selectedModules" multiple placeholder="Select Modules">
+                                @for (module of availableModules; track module.id) {
+                                <mat-option [value]="module.id">{{module.name}}</mat-option>
+                                }
+                            </mat-select>
+                            <mat-icon matSuffix class="text-muted">apps</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Scenario 1 Buttons -->
+                @if (activeScenario === 1 && !isSaved) {
+                <div class="d-flex gap-3 mt-5">
+                    <button class="ps-btn ps-btn-primary w-100 py-3" (click)="onSave()">
+                        <mat-icon>save</mat-icon>
+                        Save Configuration
+                    </button>
+                </div>
+                }
+
+                <!-- Scenario 2 Submit Button -->
+                @if (activeScenario === 2) {
+                <div class="d-flex gap-3 mt-5">
+                    <button class="ps-btn ps-btn-primary w-100 py-3" (click)="onSubmit()">
+                        <mat-icon>send</mat-icon>
+                        Submit Application
+                    </button>
+                </div>
+                }
+            </mat-card>
+
+            <!-- Step 2: Merchant Authorization (Only for Scenario 1 after Save) -->
+            @if (activeScenario === 1 && isSaved) {
+            <mat-card class="keys-card border-0 shadow-sm rounded-4 p-4 animate__animated animate__slideInUp">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-circle bg-secondary-light">
+                        <mat-icon color="accent">lock_person</mat-icon>
+                    </div>
+                    <h3 class="title1-bold m-0">Merchant Onboarding</h3>
+                </div>
+
+                <div class="mb-4">
+                    <button class="ps-btn ps-btn-secondary w-100 py-4 shadow-sm" (click)="onOnboardAsClient()">
+                        <mat-icon>open_in_new</mat-icon>
+                        Onboard as Client
+                    </button>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <label class="form-label-custom">Integration Access Key</label>
+                        <mat-form-field appearance="outline"
+                            class="w-100 key-field no-subscript d-flex align-items-center">
+                            <input matInput [(ngModel)]="accessKey" placeholder="Enter Access Key..."
+                                autocomplete="off">
+                            <button mat-flat-button color="primary" class="rounded-3 ms-2"
+                                (click)="copyToClipboard(accessKey)" [disabled]="!accessKey"
+                                style="height: 52px; min-width: 100px;">
+                                <mat-icon>content_copy</mat-icon>
+                                Copy
+                            </button>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label-custom">Integration Secret Key</label>
+                        <mat-form-field appearance="outline"
+                            class="w-100 key-field no-subscript d-flex align-items-center">
+                            <input matInput type="password" [(ngModel)]="secretKey" placeholder="Enter Secret Key..."
+                                autocomplete="off">
+                            <button mat-flat-button color="primary" class="rounded-3 ms-2"
+                                (click)="copyToClipboard(secretKey)" [disabled]="!secretKey"
+                                style="height: 52px; min-width: 100px;">
+                                <mat-icon>content_copy</mat-icon>
+                                Copy
+                            </button>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-5">
+                    <button mat-button class="text-muted" (click)="isSaved = false">
+                        <mat-icon>arrow_back</mat-icon> Back to Fields
+                    </button>
+                    <button class="ps-btn ps-btn-primary px-5" (click)="onSubmit()"
+                        [disabled]="!accessKey || !secretKey">
+                        Submit Integration
+                    </button>
+                </div>
+            </mat-card>
+            }
+        </div>
+    </div>
+</div>

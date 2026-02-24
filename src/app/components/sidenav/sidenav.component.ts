@@ -41,6 +41,7 @@ export class SidenavComponent {
       name: 'Administration',
       items: [
         { name: 'Provisioning', icon: 'rocket_launch', route: '/onboarding-kyb' },
+        { name: 'Merchant Setup', icon: 'storefront', route: '/merchant-onboarding' },
         { name: 'Identity & UAM', icon: 'admin_panel_settings', route: '/uam' },
         { name: 'App Marketplace', icon: 'dashboard_customize', route: '/modules' },
         { name: 'Site Configuration', icon: 'settings', route: '/settings' },
